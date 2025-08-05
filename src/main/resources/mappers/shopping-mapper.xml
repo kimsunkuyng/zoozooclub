@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zoozooclub.shopping.model.mapper.ShoppingMapper">
+	
+	<select id="selectProductList">
+	 SELECT *
+		FROM (
+		    SELECT inner_tbl.*
+		    FROM (
+		        SELECT
+		            p.product_description,
+		            p.product_no,
+		            p.product_name,
+		            p.product_price,
+		            p.product_image,
+		            ROUND(AVG(r.product_review_rating), 2) AS avg_rating
+		        FROM product p
+		        JOIN product_review r
+		            ON p.product_no = r.product_no
+		        WHERE p.product_no IS NOT NULL
+		          AND p.product_no != 0
+		        GROUP BY
+		            p.product_no,
+		            p.product_name,
+		            p.product_price,
+		            p.product_image,
+		            p.product_description
+		        ORDER BY avg_rating DESC
+		    ) inner_tbl
+		    WHERE ROWNUM &lt;= 4
+		)
+		ORDER BY avg_rating DESC -- 여기서 최종 정렬
+
+
+	</select>
+
+	
+	<select id="getSearchCount" resultType="int">
+    	SELECT COUNT(*) FROM product WHERE product_name LIKE '%' || #{keyword} || '%'
+	</select>
+	
+	<select id="searchProductList" resultType="Product">
+	    SELECT * FROM product 
+	    WHERE product_name LIKE '%' || #{keyword} || '%'
+	    ORDER BY product_no DESC
+	</select>
+		
+  	<select id="selectList" parameterType="com.zoozooclub.common.PageInfo" resultType="com.zoozooclub.shopping.model.vo.Product">
+  
+	    <bind name="startRow" value="(currentPage - 1) * boardLimit + 1" />
+	    <bind name="endRow" value="currentPage * boardLimit" />
+	
+	    SELECT * FROM (
+	        SELECT ROWNUM RNUM, P.*
+	        FROM (
+	            SELECT * FROM PRODUCT 
+	            WHERE PRODUCT_NO != 0
+	            ORDER BY PRODUCT_NO 
+	        ) P
+	        WHERE ROWNUM &lt;= #{endRow}
+	    )
+	    WHERE RNUM &gt;= #{startRow}
+	</select>
+
+	<select id="selectProduct" resultType="com.zoozooclub.shopping.model.vo.Product">
+		select *
+		from product
+		where PRODUCT_NO = #{pNo}
+		
+	</select>
+	
+	<select id="getProductCount">
+		select count(*)
+		from product
+	</select>
+	
+	<insert id="insertCart">
+		insert into cart 
+		values(cart_seq.nextval, #{cartAmount}, default, #{memberNo},#{pId}, #{cartPrice})
+	</insert>
+	
+	<select id="selectCart" resultType="com.zoozooclub.shopping.model.vo.Cart">
+		SELECT c.cart_no, c.cart_amount, p.product_name, p.product_price, p.product_image
+		FROM cart c
+			JOIN product p ON c.p_id = p.product_no
+            join member m on m.member_no = c.member_no
+		WHERE m.member_no = #{memberNo} and c.delete_state = 'N'
+	</select>
+	
+	<update id="deleteCart">
+		UPDATE cart
+		SET delete_state = 'Y'
+		WHERE cart_no = #{cartNo}
+	</update>
+	
+	<select id="getReviewCountByProduct">
+		SELECT COUNT(*) FROM review WHERE product_no = #{pNo}
+	</select>
+	
+	<select id="selectReviewList" resultType="com.zoozooclub.shopping.model.vo.Review">
+		select product_image, mem_name, product_review_no, product_review_content, product_review_date, product_review_rating, product_no, member_no
+		from product_review
+		    join member using(member_no)
+            join product using(product_no)
+		where product_no = #{pNo}
+		order by product_review_no desc
+	</select>
+	
+	<select id="countReivew" resultType="int">
+		select count(*)
+		from product_review
+		where product_no = #{pNo}
+	</select>
+	
+	<select id="reviewAvg" resultType="java.lang.Double">
+		select NVL(AVG(product_review_rating), 0)
+		from product_review 
+		where product_no = #{product_no}
+	</select>
+	
+	<select id="rBtnShow" parameterType="map" resultType="int">
+		 SELECT COUNT(*)
+	    FROM orders o
+	    JOIN order_detail od ON o.order_no = od.order_no
+	    JOIN member m ON o.member_no = m.member_no
+	    LEFT JOIN product_review pr 
+	        ON pr.product_no = od.product_no
+	       AND pr.member_no = m.member_no
+	    WHERE od.product_no = #{productNo}
+	      AND m.member_no = #{memberNo}
+	      AND pr.product_no IS NULL
+	</select>
+	
+	<select id="getOrderNo">
+		select order_no 
+		from orders
+		    join  order_detail using(order_no)
+		where member_no = #{memberNo} and product_no = #{productNo} 
+	</select>
+	
+	<select id="getOrderNoForOD">
+		SELECT order_no
+		FROM orders
+		WHERE member_no = #{memberNo}
+		ORDER BY order_date DESC
+		FETCH FIRST 1 ROWS ONLY
+	</select>
+	
+	<insert id="insertReview" parameterType="com.zoozooclub.shopping.model.vo.Review">
+		insert into product_review 
+		values(review_board_seq.NEXTVAL, #{productReviewContent}, SYSDATE, #{productReviewRating}, #{productNo}, #{memberNo}, #{orderNo})
+	</insert>
+	
+	<insert id="insertOrders" parameterType="com.zoozooclub.shopping.model.vo.Orders">
+		INSERT INTO orders VALUES (order_seq.nextval, #{orderAddress}, sysdate, #{memberNo}, #{payMethod}, default, default, default, default)
+	</insert>
+	
+	<insert id="insertOrderDetail">
+		insert into order_detail values (order_detail_seq.NEXTVAL, #{orderNo}, #{productNo}, #{productAmount}, #{productPrice})
+	</insert>
+	
+	<insert id="insertProDetail">
+		insert into pro_detail values (pro_detail_seq.nextval, #{productNo} , sysdate, #{amount}, '출고')
+	</insert>
+	
+	<select id="getCartListByNos" parameterType="list" resultType="com.zoozooclub.shopping.model.vo.Cart">
+		SELECT c.*, p.product_name, p.product_image, p.product_price
+		FROM cart c
+		JOIN product p ON c.p_id = p.product_no
+		WHERE 
+		<choose>
+			<when test="list != null and list.size() > 0">
+				c.cart_no IN
+				<foreach collection="list" item="cartNo" open="(" separator="," close=")">
+					#{cartNo}
+				</foreach>
+			</when>
+			<otherwise>
+				1 = 0 <!-- 빈 리스트면 무조건 false 조건 -->
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="getCouponList" resultType="com.zoozooclub.shopping.model.vo.Coupon">
+		select * from coupon
+		    join member using(member_no)
+		where member_no = #{memberNo}
+	</select>
+	
+</mapper>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>상품 등록</title>
+    <link th:href="@{/styles/productRegistration.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <!-- 사이드바 조각 삽입 -->
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- 헤더 조각 삽입 -->
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+
+            <div class="main-content">
+                <h2 class="page-title">상품 등록</h2>
+                <form class="product-form" method="post" th:action="@{/admin/enrollProduct}">
+                    <!-- 상품 이미지 -->
+                    <div class="form-group">
+                        <label for="product-image">상품 이미지</label>
+                        <input type="file" id="product-image" name="productImage" accept="image/*" />
+                    </div>
+
+                    <!-- 상품명 -->
+                    <div class="form-group">
+                        <label for="product-name">상품명</label>
+                        <input type="text" id="product-name" name="productName" placeholder="예: 소고기맛 강아지 사료" maxlength="255" required />
+                    </div>
+
+                    <!-- 상품 가격 -->
+                    <div class="form-group">
+                        <label for="product-price">상품 가격 (원)</label>
+                        <input type="number" id="product-price" name="productPrice" placeholder="예: 25000" min="0" required />
+                    </div>
+
+                    <!-- 카테고리 -->
+                    <div class="form-group">
+                        <label for="category">카테고리</label>
+                        <select id="category" name="category" required>
+                            <option value="">카테고리를 선택하세요</option>
+                            <option value="food">애견식품</option>
+                            <option value="walk">산책용품</option>
+                            <option value="toy">장난감</option>
+                        </select>
+                    </div>
+
+                    <!-- 제조회사 -->
+                    <div class="form-group">
+                        <label for="color">제조회사</label>
+                        <input type="text" id="color" name="color" placeholder="예: 댕댕푸드, 펫토이즈 등" />
+                    </div>
+
+                    <!-- 입고량 -->
+                    <div class="form-group">
+                        <label for="size">입고량</label>
+                        <input type="number" id="product-stock" name="productStock" placeholder="예: 50 (개)" min="0" required />
+                    </div>
+
+                    <!-- 등록일 -->
+                    <div class="form-group">
+                        <label for="reg-date">상품 등록일</label>
+                        <input type="date" id="reg-date" name="regDate" required />
+                    </div>
+
+                    <!-- 상품 설명 -->
+                    <div class="form-group">
+                        <label for="description">상품 설명</label>
+                        <textarea id="description" name="description" rows="6" placeholder="상품의 상세 설명을 입력하세요."></textarea>
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">상품 등록</button>
+                        <button type="reset" class="btn-reset">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/sidebar.js}"></script>
+</body>
+</html>

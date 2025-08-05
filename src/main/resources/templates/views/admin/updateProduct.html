@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>상품 수정</title>
+    <link th:href="@{/styles/productRegistration.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+
+            <div class="main-content">
+                <h2 class="page-title">상품 수정</h2>
+                <form class="product-form" method="post" th:action="@{/admin/product/update}" enctype="multipart/form-data">
+                    <!-- 상품 이미지 -->
+                    <div class="form-group">
+                        <label for="product-image">상품 이미지</label>
+                        <input type="file" id="product-image" name="productImage" accept="image/*" />
+                    </div>
+
+                    <!-- 상품명 -->
+                    <div class="form-group">
+                        <label for="product-name">상품명</label>
+                        <input type="text" id="product-name" name="productName" placeholder="예: 플라워 미니 원피스" maxlength="255" required/>
+                    </div>
+
+                    <!-- 상품 가격 -->
+                    <div class="form-group">
+                        <label for="product-price">상품 가격 (원)</label>
+                        <input type="number" id="product-price" name="productPrice" placeholder="예: 25000" min="0" required/>
+                    </div>
+
+                    <!-- 카테고리 -->
+                    <div class="form-group">
+                        <label for="category">카테고리</label>
+                        <select id="category" name="category" required>
+                            <option value="">카테고리를 선택하세요</option>
+                            <option value="top">상의</option>
+                            <option value="bottom">하의</option>
+                            <option value="outer">아우터</option>
+                            <option value="dress">원피스</option>
+                            <option value="shoes">신발</option>
+                        </select>
+                    </div>
+
+                    <!-- 색상 -->
+                    <div class="form-group">
+                        <label for="color">색상</label>
+                        <input type="text" id="color" name="color" placeholder="예: 베이지, 블랙 등" />
+                    </div>
+
+                    <!-- 사이즈 -->
+                    <div class="form-group">
+                        <label for="size">사이즈</label>
+                        <select id="size" name="size">
+                            <option value="">사이즈 선택</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="Free">Free</option>
+                        </select>
+                    </div>
+
+                    <!-- 등록일 -->
+                    <div class="form-group">
+                        <label for="reg-date">상품 등록일</label>
+                        <input type="date" id="reg-date" name="regDate" required />
+                    </div>
+
+                    <!-- 상품 설명 -->
+                    <div class="form-group">
+                        <label for="description">상품 설명</label>
+                        <textarea id="description" name="description" rows="6" placeholder="상품의 상세 설명을 입력하세요."></textarea>
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">상품 수정</button>
+                        <button type="reset" class="btn-reset">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/sidebar.js}"></script>
+</body>
+</html>

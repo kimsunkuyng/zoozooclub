@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>결제 목록</title>
+    <!-- CSS 경로를 Spring 정적 리소스 경로에 맞게 수정 -->
+    <link th:href="@{/styles/PaymentList.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/footer.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+
+            <div class="main-content">
+                <div class="top-controls">
+                    <div class="search-box">
+                        <input type="text" placeholder="주문검색" />
+                        <button>검색</button>
+                    </div>
+                </div>
+
+                <!-- 주문 테이블 -->
+                <table class="payment-table">
+                    <thead>
+                        <tr>
+                            <th>주문번호</th>
+                            <th>품목/수량</th>
+                            <th>구매자</th>
+                            <th>배송지</th>
+                            <th>결제수단</th>
+                            <th>결제상태</th>
+                            <th>배송상태</th>
+                            <th>쿠폰적용</th>
+                            <th>총 가격</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payment-body">
+					    <tr th:each="p : ${list}">
+					        <td>[[${p.orderNo}]]</td>
+					        <td>맛있는 참치캔</td>
+					        <td>[[${p.memberNo}]]</td>
+					        <td>[[${p.orderAddress}]]</td>
+					        <td>[[${p.payMethod}]]</td>
+					        <td><span class="status paid">[[${p.payState}]]</span></td>
+					        <td><span class="status shipped">[[${p.deliveryState}]]</span></td>
+					        <td>O</td>
+					        <td>137,000</td>
+					    </tr>
+					</tbody>
+                </table>
+                    
+<!--                 <div class="paging"> -->
+<!-- 				    <ul class="pagination"> -->
+<!-- 				        이전 페이지 -->
+<!-- 				        <li th:if="${pi.currentPage > 1}"> -->
+<!-- 				            <a th:href="@{'/admin/productList?page=' + ${pi.currentPage - 1}}">&laquo;</a> -->
+<!-- 				        </li> -->
+				
+<!-- 				        페이지 번호 -->
+<!-- 				        <li th:each="pageNum : ${#numbers.sequence(pi.startPage, pi.endPage)}" -->
+<!-- 				            th:classappend="${pageNum == pi.currentPage} ? 'active'"> -->
+<!-- 				            <a th:href="@{'/admin/productList?page=' + ${pageNum}}" -->
+<!-- 				               th:text="${pageNum}">1</a> -->
+<!-- 				        </li> -->
+				
+<!-- 				        다음 페이지 -->
+<!-- 				        <li th:if="${pi.currentPage < pi.maxPage}"> -->
+<!-- 				            <a th:href="@{'/admin/productList?page=' + ${pi.currentPage + 1}}">&raquo;</a> -->
+<!-- 				        </li> -->
+<!-- 				    </ul> -->
+<!-- 				</div>  -->
+            </div> 
+
+            <!-- footer 조각 삽입 -->
+            <div th:replace="~{views/common/admin_footer :: footer}"></div>
+        </div>
+    </div>
+    <script th:src="@{/js/sidebar.js}"></script>
+</body>
+</html>

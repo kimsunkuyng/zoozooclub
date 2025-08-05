@@ -1,0 +1,27 @@
+
+<div class="review-block">
+  <div class="">
+    <p class="title">이 상품의 품질에 대해서 얼마나 만족하시나요?</p>
+
+    <div class="group">
+      <label class="label">한 줄 요약</label>
+      <input type="text" class="input-text" placeholder="한 줄 요약을 입력해주세요" maxlength="30" />
+    </div>
+
+    <div class="group">
+      <label class="label">상세리뷰</label>
+      <textarea class="textarea" rows="5" placeholder="다른 고객님께 도움이 되도록 솔직한 후기를 남겨주세요."></textarea>
+      <p class="hint">* 배송, 포장, 판매자 평가는 제외</p>
+    </div>
+
+    <div class="group">
+      <label class="label">사진 첨부 <span class="hint">(최대 10장, 20MB)</span></label>
+      <input type="file" />
+    </div>
+
+    <div class="button-group">
+      <button class="action-button" onclick="cancelReview()">취소하기</button>
+      <button class="action-button" onclick="submitReview()">등록하기</button>
+    </div>
+  </div>
+</div>

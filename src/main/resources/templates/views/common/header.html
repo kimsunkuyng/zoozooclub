@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>🐶ZOOZOO클럽</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travelix Project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css"
+	href="../styles/bootstrap4/bootstrap.min.css">
+<link href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css"
+	href="../plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css"
+	href="../plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css"
+	href="../plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="../styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="../styles/responsive.css">
+<link rel="stylesheet" type="text/css" href="../styles/mypage.css">
+</head>
+<style>
+	.main_nav_item a {
+	  font-weight: 500;
+	  color: #333;
+	  transition: 0.3s;
+	}
+	
+	.main_nav_item a:hover {
+	  color: #fa9e1c;
+	}
+	.main_nav {
+	  height: 150px; /* 원하는 높이 */
+	  display: flex;
+	  align-items: center;
+	}
+	.main_nav_item a {
+    	color: white;
+	    text-decoration: none;
+	    font-weight: bold;
+	    font-size: 16px;
+	    white-space: nowrap; /* 줄바꿈 방지 */
+  	}
+</style>
+<body>
+	<div class="super_container">
+
+		<header class="header" style="background-color: #F0BA7D; height: 150px;">
+			<nav class="main_nav">
+				<div class="container">
+					<div class="row">
+						<div class="col d-flex align-items-center justify-content-between">
+
+							<!-- 왼쪽 로고 -->
+							<div class="logo_container">
+								<div class="logo">
+									<a style=" white-space: nowrap;" href="/">🐶ZOOZOO클럽</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+								</div>
+							</div>
+
+							<!-- 오른쪽 메뉴 -->
+							<div class="main_nav_container">
+								<ul class="main_nav_list d-flex mb-0 align-items-center"
+									style="gap: 20px;">
+									<li class="main_nav_item"><a href="/shopping/list">쇼핑</a></li>
+									<li class="main_nav_item"><a href="/board/cslist">문의사항</a></li>
+									<li class="main_nav_item"><a href="/board/noticelist">공지사항</a></li>
+									<li class="main_nav_item"><a href="/board/Q&A">커뮤니티</a></li>
+
+									<li class="main_nav_item" th:if="${session.loginUser == null}">
+										<a href="/member/login">로그인</a>
+									</li>
+									<li class="main_nav_item" th:if="${session.loginUser != null}">
+										<a href="/member/logout">로그아웃</a>
+									</li>
+									<li class="main_nav_item" th:if="${session.loginUser != null}">
+										<a href="/shopping/cart">장바구니</a>
+									</li>
+									<li class="main_nav_item" th:if="${session.loginUser != null}">
+										<a href="/member/mypage">마이페이지</a>
+									</li>
+									<li class="main_nav_item" th:if="${session.loginUser != null}">
+										<a href="/admin/paymentList">관리자</a>
+									</li>
+								</ul>
+							</div>
+
+							<!-- 햄버거 메뉴 (모바일용) -->
+							<div class="hamburger">
+								<i class="fa fa-bars trans_200"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+	</div>
+</body>
+</html>

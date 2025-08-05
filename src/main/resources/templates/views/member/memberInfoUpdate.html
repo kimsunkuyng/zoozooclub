@@ -1,0 +1,64 @@
+
+<div class="mypage-block member-update">
+<div class="container-mypageInfoUpdate">
+
+    <!-- Profile image + buttons -->
+    <form th:action="@{/member/update}" th:object="${loginUser}" method="post" onsubmit="return finalValidation()">
+	    <div class="flex-col-center">
+	      <img class="self-icon"src ="/images/selfy.jpeg">
+	      <div style="display: flex; gap: 0.5rem;">
+	        <button class="button-pill" type="button">사진 변경</button>
+	      </div>
+	    </div>
+	
+	    <!-- Form Fields -->
+	    <div style="text-align: left; display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+	
+	      <!-- 닉네임 -->
+	      <div class="">
+	          <div class="input-group">
+	          <label class="label">ID :</label>
+	          <input type="text" th:field="*{memberId}" style="border: none;" id="memberId" class="input-text" th:placeholder="${loginUser.memberId}"/>
+	          <button type="button" class="input-button" onclick="checkId()">중복체크</button>
+	          </div>
+	          <p class="hint" id="idCheckResult"></p>
+	      </div>
+	
+	      <!-- 전화번호 -->
+	      <div>
+	        <label class="label">전화번호</label>
+	        <div class="input-group">
+	          <input type="text" th:field="*{phone}" th:placeholder="010-1234-5678" class="input-text" id="phone" />
+	          <button type="button" class="input-button" id="verifyBtn" onclick="handleVerifyClick()" th:disabled="${loginUser.phoneVerify == 'Y'}"  th:text="${loginUser.phoneVerify == 'Y'} ? '인증완료' : '인증번호 받기'"></button>
+	        </div>
+	       	<div class="input-group" id="verifyBox" hidden>
+	          <input type="text" id="verifyInput" placeholder="인증번호입력" class="input-text" />
+	          <button type="button" class="input-button" onclick="verifyInputBtn()" th:disabled="${loginUser.phoneVerify == 'Y'}">인증번호 확인</button>
+	        </div>
+	       
+	        <p class="hint" id="smsSuccess"></p>
+	      </div>
+	
+	      <!-- 간단 소개 -->
+	      <div>
+	        <label class="label">간단 소개</label>
+	        <textarea rows="3" class="textarea1" th:field="*{userIntro}" placeholder="다른 사용자에게 보일 간단 소개 입니다. (1~200자)"></textarea>
+	      </div>
+	
+	      <!-- Email + Google Icon -->
+	      <div class="email-box">
+	        <span style="font-size: 0.875rem;" th:text="${loginUser.email}"></span>
+	      </div>
+	
+	      <!-- 수정하기 button -->
+	      <button class="submit-button" type="submit">수정하기</button>
+	    </div>
+	</form>
+	    <!-- 회원탈퇴 -->
+	    <div class="footer-text">
+	      <a href="/member/delete" class="link" style="font-weight: 500;">회원탈퇴</a><br>
+	      <p>회원 탈퇴 시 계정 관련 데이터는 복구할 수 없습니다.</p>
+	    </div>
+    
+  </div>
+</div>

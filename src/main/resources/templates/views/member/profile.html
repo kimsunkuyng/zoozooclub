@@ -1,0 +1,62 @@
+
+<div class="mypage-block">
+<div>
+  <!-- Profile Section -->
+  <section class="white-bg rounded shadow center-box" style="padding: 2rem; text-align: center; margin-bottom: 3rem;">
+
+    <!-- Profile Image -->
+    <div class="rounded-full" style="margin: 0 auto; width: 2rem; height: 2rem; background-color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: gray;">
+    </div>
+
+    <!-- Nickname -->
+    <div style="margin-top: 0.0rem;">
+      <img src="/images/selfy.jpeg"
+       style="width: 6rem; height: 6rem; object-fit: cover; border-radius: 0.5rem;"/>
+      <p class="gray-text" style="font-size: 0.875rem;" th:text="'ID: ' +${loginUser.memberId}">Loading...</p>
+      <p style="font-size: 1.125rem; font-weight: bold;" th:text="${loginUser.memName}">Loading...</p>
+    </div>
+
+    <!-- Email + Google icon -->
+    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid white; padding: 0.5rem;">
+      <span class="gray-text" style="font-size: 0.875rem;" th:text="${loginUser.email}">Loading...</span>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid white; padding: 0.5rem;">
+       <span class="gray-text" style="font-size: 0.875rem;" th:text="${loginUser.phone}">Loading...</span>
+    </div>
+   
+
+    <!-- Edit & Logout Buttons -->
+    <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+      <button class="btn btn-gray" onclick="loadPage('/member/myInfoUpdate', event)">회원 정보 수정</button>
+    </div>
+  </section>
+  
+  <section class="center-box" style="text-align: center;">
+  <!-- Pet Gallery Section -->
+		<div class="carousel-wrapper">
+		  <div class="carousel-inner" id="petCarousel">
+		    <div class="pet-card" th:each="pet : ${petList}">
+		      <img src="/images/petsSelfy.jpeg" />
+		      <div class="pet-info">
+		        <p style="font-size: 1.5rem" th:text="${pet.petName}">이름</p>
+		        <p th:text="'( ' + ${pet.petCategory} + ' )'">품종</p>
+		        <p th:text="'생년월일: ' + ${pet.petBirthDay}">생년월일</p>
+		      </div>
+		      
+		    </div>
+		  </div>
+		</div>
+		
+		<!-- Navigation Buttons -->
+		<div style="text-align: center; margin-top: 1rem;">
+		  <button onclick="prevSlide()">◀</button>
+		  <button onclick="nextSlide()">▶</button>
+		</div>
+
+    <!-- Add Button -->
+    <p></p>
+    <button class="btn btn-gray" onclick="loadPage('/pet/setting', event)" style="padding: 0.5rem 1.5rem; border-radius: 9999px;">추가하기</button>
+  </section>
+</div>
+</div>
+

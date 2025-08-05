@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>상품 관리 페이지</title>
+    <!-- 정적 리소스 경로는 /static/css 아래에 css 파일 위치 -->
+    <link th:href="@{/styles/ProductList.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/footer.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+
+            <div class="mainContent">
+                <div class="top-controls">
+                    <div class="left-control">
+                    	<form th:action="@{/admin/enrollProduct}" method="get" style="display: inline;">
+                        	<button class="btn-add" type="submit">상품등록</button>
+                        </form>
+                        <button class="btn-delete">선택삭제</button>
+                    </div>
+                    <div class="right-control">
+                        <div class="search-box">
+                            <input type="text" placeholder="상품검색" />
+                            <button>검색</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-list">
+                    <div class="product-card" th:each="p: ${list}">
+                        <div class="product-section section-id">
+                            <div class="product-id">[[${p.productNo}]]</div>
+                            <input type="checkbox" name="productNo"/>
+                        </div>
+
+                        <div class="product-section section-image">
+                            <div class="product-image">상품이미지</div>
+                        </div>
+
+                        <div class="product-section section-info">
+                            <div class="product-details">
+                            	<p>[[${p.productName}]]</p>
+                            	<p>[[${p.productPrice}]] 원</p>
+                            	<p>[[${p.productDescription}]]</p>
+                            	<p>[[${p.productCompany}]]</p>
+                            </div>
+                        </div>
+
+                        <div class="product-section section-actions">
+                            <button class="btn-submit" type="button" onclick="location.href='/admin/updateProduct'">수정</button>
+                            <button class="btn-reset">삭제</button>
+                        </div>
+                    </div>
+                    <!-- 필요하면 여기에 th:each 로 반복 처리 가능 -->
+                </div>
+            </div>
+
+			<!-- 페이징 프래그먼트 삽입 (꼭 product-list div 바깥/아래) -->
+			<div th:replace="~{fragments/pagination :: pagination(pi=${pi})}"></div>
+			
+<!--             footer 조각 삽입 -->
+<!--             <div th:replace="~{views/common/admin_footer :: footer}"></div> -->
+        </div>
+    </div>
+    
+    <script th:src="@{/js/sidebar.js}"></script>
+    
+	<script th:inline="javascript">
+		document.addEventListener('DOMContentLoaded', function () {
+		    // 수정 버튼 클릭 시 이동
+		    const editButtons = document.querySelectorAll('.btn-submit');
+		    editButtons.forEach(button => {
+		        button.addEventListener('click', function (e) {
+		            e.stopPropagation();
+		            window.location.href = '/admin/updateProduct';
+		        });
+		    });
+		  
+		 // 삭제 버튼 클릭 시 동작
+		    const deleteButton = document.querySelector('.btn-delete');
+
+		    deleteButton.addEventListener('click', function () {
+		        // 모든 product-card를 가져옴
+		        const productCards = document.querySelectorAll('.product-card');
+
+		        productCards.forEach(card => {
+		            const checkbox = card.querySelector('input[type="checkbox"]');
+		            if (checkbox && checkbox.checked) {
+		                // 카드 숨기기 (삭제 아님)
+		                card.style.display = 'none';
+		            }
+		        });
+		    });
+		});
+		
+	</script>
+</body>
+</html>

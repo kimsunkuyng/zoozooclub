@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace ="com.zoozooclub.board.model.mapper.BoardMapper">
+
+	<select id="getListcount" resultType="_int">
+		select count(*)
+		from 
+		<choose>
+			<when test='type == "c"'>
+				cs_board c
+				join member m on m.member_no=c.member_no
+				left join cs_reply cr on c.cs_no=cr.cs_no
+				where c.cs_isdelete = 'N'
+				<if test="csKeyword != null and csKeyword !=''">
+					and(
+						c.cs_title like '%' || #{csKeyword} || '%'
+						or to_char(c.cs_no) like '%' || #{csKeyword} || '%'
+						or m.mem_name like '%' || #{csKeyword} || '%'
+					
+					)
+				</if>
+				
+				<if test="csSortType=='open'">
+					and c.cs_secret='N'
+				</if>
+				<if test="csSortType=='replycomplete'">
+					and cr.cs_reply_no is not null
+				</if>
+			
+			</when>
+			
+			
+			<when test='type == "q"'>
+				board q
+				join member m on m.member_no = q.member_no
+				where q.is_delete ='N' and q.board_isnotice='N'
+				<if test = "QnAKeyword != null and QnAKeyword != ''">
+					and(
+						q.board_title like '%' || #{QnAKeyword} || '%'
+						or to_char(q.board_no) like '%' || #{QnAKeyword} || '%'
+						or to_char(q.board_date,'YYYY-MM-DD') like '%'|| #{QnAKeyword} || '%'
+						or m.mem_name like '%' || #{QnAKeyword} || '%'
+					)
+				</if>
+			</when>
+			<otherwise>
+				board n 
+				join member m on m.member_no=n.member_no
+				where n.is_delete ='N' and n.board_isnotice ='Y'
+				<if test="noticeKeyword != null and noticeKeyword !=''">
+					and(
+						n.board_title like '%' || #{noticeKeyword} || '%'
+						or to_char(n.board_no) like '%' || #{noticeKeyword}|| '%'
+						or to_char(n.board_date,'YYYY-MM-DD') like '%' || #{noticeKeyword} || '%'
+						or m.mem_name like '%' || #{noticeKeyword} || '%'
+					)
+				</if>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<!-- ======================================================================== -->
+	
+	
+	
+	<select id="selectBoardList" resultType="Board">
+		select *
+		from member m
+		<choose>
+			<when test='type == "c"'>
+				join cs_board c on(m.member_no=c.member_no)
+				left join cs_reply cr on c.cs_no=cr.cs_no
+				where c.cs_isdelete='N'
+				<if test="csKeyword != null and csKeyword != ''">
+					and(
+						c.cs_title like '%' || #{csKeyword} || '%'
+						or to_char(c.cs_no) like '%' || #{csKeyword} || '%'
+						or m.mem_name like '%' || #{csKeyword} || '%'
+						
+					)
+				</if>
+				<choose>
+			    <when test="csSortType == 'open'">
+			      and c.cs_secret = 'N'
+			      order by c.cs_no desc
+			    </when>
+			    <when test="csSortType == 'replycomplete'">
+			      and cr.cs_reply_no is not null
+			      order by c.cs_no desc
+			    </when>
+			    <otherwise>
+			      order by c.cs_no desc
+			    </otherwise>
+			  </choose>
+				
+			</when>
+			<when test='type == "q"'>
+				join board q on(m.member_no=q.member_no)
+				where q.is_delete ='N' and q.board_isnotice='N'
+				<if test = "QnAKeyword != null and QnAKeyword != ''">
+					and(
+						q.board_title like '%' || #{QnAKeyword} || '%'
+						or to_char(q.board_no) like '%' || #{QnAKeyword} || '%'
+						or to_char(q.board_date,'YYYY-MM-DD') like '%'|| #{QnAKeyword} || '%'
+						or m.mem_name like '%' || #{QnAKeyword} || '%'
+					)
+				</if>
+				order by q.board_no desc
+			</when>
+			<otherwise>
+				join board n on(m.member_no=n.member_no)
+				where n.is_delete ='N' and n.board_isnotice ='Y'
+				<if test="noticeKeyword != null and noticeKeyword !=''">
+					and(
+						n.board_title like '%' || #{noticeKeyword} || '%'
+						or to_char(n.board_no) like '%' || #{noticeKeyword}|| '%'
+						or to_char(n.board_date,'YYYY-MM-DD') like '%' || #{noticeKeyword} || '%'
+						or m.mem_name like '%' || #{noticeKeyword} || '%'
+					)
+				</if>
+				<choose>
+					<when test="noticeSortType == 'oldest'">
+						order by
+							case
+								when n.board_category = 1 then 1
+								when n.board_category = 2 then 2
+								else 3
+							end asc,
+							case
+								when n.board_category is null then n.board_no
+								else null
+							end asc,
+							n.board_no asc
+					</when>
+
+					<when test="noticeSortType == 'views'">
+						order by
+							case
+								when n.board_category = 1 then 1
+								when n.board_category = 2 then 2
+								else 3
+							end asc,
+							case
+								when n.board_category is null then n.board_no
+								else null
+							end asc,
+							n.board_read_count desc
+					</when>
+
+					<otherwise> <!-- latest or null -->
+						order by
+							case
+								when n.board_category = 1 then 1
+								when n.board_category = 2 then 2
+								else 3
+							end asc,
+							case
+								when n.board_category is null then n.board_no
+								else null
+							end asc,
+							n.board_no desc
+						</otherwise>
+					</choose>
+			</otherwise>
+		</choose>	
+	</select>
+	
+	<insert id="csinsertBoard">
+		<if test="productNo == null">
+			insert into cs_board 
+		    values (cs_board_seq.NEXTVAL, #{csTitle}, #{csContent}, SYSDATE, #{csIsDelete},#{csSecret},#{memberNo},#{csPassword}, #{csImage},default, 0)
+		</if>
+		<if test="productNo != null">
+			insert into cs_board 
+		    values (cs_board_seq.NEXTVAL, #{csTitle}, #{csContent}, SYSDATE, #{csIsDelete},#{csSecret},#{memberNo},#{csPassword}, #{csImage},default, #{productNo})
+		</if>
+	</insert>
+	
+	<select id="selectCsBoardDetail" resultType="Board">
+		select c.cs_no,c.cs_title,c.cs_content,c.cs_date,c.cs_secret,c.member_no,c.cs_image,m.mem_name
+		from cs_board c
+		join member m on c.member_no=m.member_no
+		where cs_no=#{csNo}
+	</select>
+	
+	<select id="checkCsPassword" resultType="int">
+		select *
+		from cs_board
+		where cs_no = #{csNo}
+			and cs_password=#{csPassword}
+			and cs_isdelete='N'
+			and cs_secret='Y'
+	</select>
+	<select id="selectCsReply" resultType="CsReply">
+		select *
+		from cs_reply cr
+			join member m on (cr.member_no=m.member_no)
+		where ref_csboard_id=#{refCsboardId} and m.is_admin='Y'
+		
+	</select>
+	<update id="updateCsPost">
+		update cs_board
+		set cs_title=#{csTitle},cs_content=#{csContent},
+			cs_date=sysdate,cs_secret=#{csSecret},
+			cs_password=#{csPassword},cs_image=#{csImage}
+		where cs_no=#{csNo}
+	</update>
+	<select id="selectBoardContent" resultType="Board">
+		select *
+		from cs_board
+		where cs_no=#{csNo}
+	</select>
+	<update id="deleteCsPost">
+		update cs_board
+		set cs_isdelete='Y'
+		where cs_no=#{csNo}
+	</update>
+
+	<select id="selectBoardListIndex">
+		SELECT * 
+		FROM board 
+		WHERE board_category is null
+		  AND is_delete = 'N' 
+		ORDER BY board_read_count DESC
+		FETCH FIRST 4 ROWS ONLY
+	</select>
+
+</mapper>

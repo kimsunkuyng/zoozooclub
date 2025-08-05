@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>🐶ZOOZOOCLUB_SHOPPING</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travelix Project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css"
+	href="../styles/bootstrap4/bootstrap.min.css">
+<link href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css"
+	href="../styles/offers_styles.css">
+<link rel="stylesheet" type="text/css"
+	href="../styles/offers_responsive.css">
+</head>
+<style>
+.home {
+	height: 500px !important;
+}
+
+.custom-pagination .page-link {
+	color: #fa9e1c;
+	border: 1px solid #fa9e1c;
+	margin: 0 5px;
+	border-radius: 20px;
+	transition: 0.3s;
+}
+
+.custom-pagination .page-link:hover {
+	background-color: #fa9e1c;
+	color: white;
+}
+
+.custom-pagination .page-item.active .page-link {
+	background-color: #fa9e1c;
+	color: white;
+	border-color: #fa9e1c;
+}
+
+.custom-pagination .page-item.disabled .page-link {
+	color: #ccc;
+	border-color: #ccc;
+}
+</style>
+<body>
+	<div th:replace="~{views/common/header}"></div>
+
+	<div class="super_container">
+		<div class="menu trans_500">
+			<div
+				class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
+				<div class="menu_close_container">
+					<div class="menu_close"></div>
+				</div>
+				<div class="logo menu_logo">
+					<a href="#"><img src="../images/logo.png" alt=""></a>
+				</div>
+				<ul>
+					<li class="menu_item"><a href="index.html">home</a></li>
+					<li class="menu_item"><a href="about.html">about us</a></li>
+					<li class="menu_item"><a href="#">offers</a></li>
+					<li class="menu_item"><a href="blog.html">news</a></li>
+					<li class="menu_item"><a href="contact.html">contact</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="home">
+			<div class="home_background parallax-window" data-parallax="scroll"
+				style="background-color: #f9f9f9; padding: 0;"></div>
+			<div class="home_content">
+				<div class="home_title" style="color: #fa9e1c;">SHOPPING MALL</div>
+			</div>
+		</div>
+
+		<div class="offers">
+			<div class="text-center mt-4">
+				<p style="font-size: 18px; font-weight: 500; color: #555;">원하시는
+					상품을 직접 검색해보세요</p>
+				<form th:action="@{/shopping/list}" method="get"
+					class="d-flex justify-content-center align-items-center gap-2 mt-2">
+					<input t type="text" name="keyword" th:value="${keyword}"
+						placeholder="검색어를 입력하세요" required
+						style="width: 400px; height: 45px; padding: 0 15px; border: 2px solid #fa9e1c; border-radius: 6px;">
+
+					<button type="submit"
+						style="height: 45px; padding: 0 25px; background-color: #fa9e1c; color: white; border: none; border-radius: 6px; font-weight: bold;">
+						검색</button>
+				</form>
+			</div>
+			<div class="container">
+				<div class="row" style="margin-top: 100px;">
+					<div class="col-lg-12" th:if="${pList != null}">
+
+						<!-- 검색 결과 없음 -->
+						<div th:if="${#lists.isEmpty(pList)}" class="text-center my-5">
+							<h5 style="color: gray;">검색 결과가 없습니다.</h5>
+						</div>
+
+						<!-- 검색 결과 있을 경우 -->
+						<div class="offers_item" th:unless="${#lists.isEmpty(pList)}">
+							<th:block th:each="p, stat : ${pList}">
+								<div class="offers_wrapper">
+									<div class="offers_item">
+										<div class="row" style="margin-bottom: 50px;">
+											<div class="col-lg-1 temp_col"></div>
+											<div class="col-lg-3 col-1680-4">
+												<div class="offers_image_container">
+													<div class="offers_image_background"
+													     th:style="'background-image:url(' + @{/images/{file}(file=${p.productImage})} + ');'">
+													</div>
+													<div class="offer_name">
+														<a th:href="@{/shopping/detail(pId=${p.productNo})}">[[${p.productName}]]</a>
+													</div>
+												</div>
+											</div>
+											<div class="col-lg-8">
+												<div class="offers_content">
+													<div class="offers_price">
+														[[${#numbers.formatInteger(p.productPrice, 3, 'COMMA')}]]원
+													</div>
+													<p class="offers_text">[[${p.productDescription}]]</p>
+													<div class="button book_button">
+														<a th:href="@{/shopping/detail(pNo=${p.productNo})}">보러가기</a>
+													</div>
+													<div class="offer_reviews">
+														<div class="offer_reviews_content">
+															<div class="offer_reviews_title">
+																<th:block th:if="${rAvgList[stat.index]} == 5">최고에요!</th:block>
+																<th:block
+																	th:if="${rAvgList[stat.index]} >= 4 and ${rAvgList[stat.index]} < 5">추천해요</th:block>
+																<th:block
+																	th:if="${rAvgList[stat.index]} >= 3 and ${rAvgList[stat.index]} < 4">괜찮아요</th:block>
+																<th:block th:if="${rAvgList[stat.index]} < 3">별로에요</th:block>
+															</div>
+															<div class="offer_reviews_subtitle">
+																[[${rCountList[stat.index]}]] reviews</div>
+														</div>
+														<div class="offer_reviews_rating text-center">
+															[[${#numbers.formatDecimal(rAvgList[stat.index], 1, 1)}]]
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</th:block>
+
+							<!-- Pagination -->
+							<ul class="pagination justify-content-center custom-pagination">
+								<!-- 이전 버튼 -->
+								<li class="page-item"
+									th:classappend="${pi.currentPage == 1} ? 'disabled'"><a
+									class="page-link"
+									th:href="@{/shopping/list(page=${pi.currentPage - 1}, keyword=${keyword})}"
+									aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+								</a></li>
+
+								<!-- 페이지 번호 -->
+								<li class="page-item"
+									th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}"
+									th:classappend="${p == pi.currentPage} ? 'active'"><a
+									class="page-link"
+									th:href="@{/shopping/list(page=${p}, keyword=${keyword})}">[[${p}]]</a>
+								</li>
+
+								<!-- 다음 버튼 -->
+								<li class="page-item"
+									th:classappend="${pi.currentPage == pi.maxPage} ? 'disabled'">
+									<a class="page-link"
+									th:href="@{/shopping/list(page=${pi.currentPage + 1}, keyword=${keyword})}"
+									aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+								</a>
+								</li>
+							</ul>
+						</div>
+						<!-- end of offers_item -->
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div th:replace="~{views/common/footer}"></div>
+	</div>
+</body>
+</html>

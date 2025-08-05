@@ -1,0 +1,804 @@
+/* === Global Reset and Box-Sizing === */
+.mypage-block *, .mypage-block *::before, .mypage-block *::after {
+	box-sizing: border-box;
+	color: black !important;
+}
+
+/* === Layout Containers === */
+.mypage-block {
+	margin-top: 160px;
+}
+
+.mypage-block .container {
+	max-width: 64rem;
+	margin: 2rem auto;
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+}
+
+.mypage-block .center-box {
+	width: 100%;
+	max-width: 400px;
+	margin: 2rem auto;
+}
+
+/* === Box & Border Utilities === */
+.mypage-block .rounded {
+	border-radius: 1rem;
+}
+
+.mypage-block .rounded-full {
+	border-radius: 9999px;
+}
+
+.mypage-block .gray-text {
+	color: gray;
+}
+
+.mypage-block .white-bg {
+	background-color: white;
+}
+
+.mypage-block .gray-bg {
+	background-color: #f3f3f3;
+}
+
+.mypage-block .gray-border {
+	border: 1px solid gray;
+}
+
+/* === Buttons === */
+.mypage-block .btn {
+	padding: 0.5rem 0;
+	border-radius: 0.375rem;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.mypage-block .btn-gray {
+	background-color: gray;
+	color: white;
+	border: none;
+}
+
+.mypage-block .btn-outline {
+	background-color: white;
+	color: gray;
+	border: 1px solid gray;
+}
+
+.mypage-block .button-pill {
+	font-size: 0.875rem;
+	font-weight: 600;
+	padding: 0.375rem 1rem;
+	border-radius: 9999px;
+	background: #ccc;
+	color: white;
+	border: none;
+	cursor: pointer;
+}
+
+.mypage-block .action-button {
+	font-size: 0.875rem;
+	padding: 0.25rem 1rem;
+	border: 1px solid #ccc;
+	border-radius: 0.25rem;
+	background: white;
+	color: black;
+	cursor: pointer;
+}
+
+.mypage-block .submit-button {
+	width: 100%;
+	padding: 0.5rem 0;
+	font-weight: 700;
+	border-radius: 9999px;
+	border: 1px solid black;
+}
+
+.mypage-block .button {
+	padding: 0.5rem 1rem;
+	border: none;
+	border-radius: 0.25rem;
+	background: white;
+	color: black;
+	cursor: pointer;
+}
+
+/* === Cards & Grid Layouts === */
+.mypage-block .card {
+	border-radius: 0.75rem;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	padding: 1.5rem;
+	background: white;
+}
+
+.mypage-block .grid-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.mypage-block .grid-card {
+	border-radius: 0.5rem;
+	padding: 1.5rem;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	background: white;
+}
+
+/* === Avatars & Summary === */
+.mypage-block .summary-row {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.mypage-block .avatar {
+	border-radius: 9999px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #eee;
+}
+
+.mypage-block .summary-value {
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.mypage-block .summary-label {
+	font-size: 0.875rem;
+}
+
+/* === Coupons === */
+.mypage-block .coupon-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.mypage-block .coupon-item {
+	border: 1px solid black;
+	border-radius: 0.375rem;
+	padding: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.mypage-block .coupon-badge {
+	font-size: 0.875rem;
+	font-weight: 700;
+	padding: 0.25rem 0.75rem;
+	border-radius: 0.25rem;
+	background: white;
+}
+
+.mypage-block .coupon-large {
+	border: 4px solid black;
+	border-radius: 0.375rem;
+	padding: 1rem;
+	background: white;
+}
+
+.mypage-block .coupon-large-title {
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin-bottom: 0.25rem;
+}
+
+.coupon-large-desc, .mypage-block .coupon-large ul {
+	font-size: 0.875rem;
+}
+
+.mypage-block .coupon-footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.mypage-block .coupon-footer a {
+	font-size: 0.875rem;
+	text-decoration: underline;
+}
+
+/* === Forms & Inputs === */
+.mypage-block body {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 1rem;
+	background: white;
+	color: black;
+}
+
+.mypage-block .flex-col-center {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.mypage-block .self-icon {
+	width: 7rem;
+	height: 7rem;
+	object-fit: contain;
+	display: inline-block;
+	border-radius: 2rem;
+}
+
+.mypage-block .label {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	resize: none;
+}
+
+.mypage-block .hint {
+	font-size: 0.875rem;
+	margin-top: 0.25rem;
+}
+
+.mypage-block .input-group {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-top: 0.25rem;
+}
+
+.mypage-block .input-text {
+	flex-grow: 1;
+	padding: 0.5rem 0.75rem;
+	border: 1px solid black;
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+	outline: none;
+}
+
+.mypage-block .input-button {
+	font-size: 0.75rem;
+	border: 1px solid black;
+	padding: 0.25rem 0.75rem;
+	border-radius: 9999px;
+	background: white;
+	cursor: pointer;
+}
+
+.mypage-block .textarea {
+	width: 100%;
+	border: 1px solid black;
+	border-radius: 0.375rem;
+	padding: 0.5rem 0.75rem;
+	font-size: 0.875rem;
+	margin-top: 0.25rem;
+	resize: none;
+}
+
+.mypage-block .email-box {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border: 1px solid black;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.375rem;
+}
+
+/* === Accordion & Q&A === */
+.mypage-block .section {
+	margin-bottom: 3rem;
+}
+
+.mypage-block .accordion {
+	margin-bottom: 1rem;
+}
+
+.mypage-block .accordion-button {
+	width: 100%;
+	text-align: left;
+	padding: 0.75rem 1rem;
+	font-weight: 600;
+	border-radius: 0.375rem;
+}
+
+.mypage-block .accordion-content {
+	max-height: 400px;
+	overflow-y: auto;
+	margin-top: 0.5rem;
+	display: block;
+}
+
+.mypage-block .accordion-box {
+	padding: 1rem;
+	border-radius: 0.375rem;
+}
+
+.mypage-block .question, .mypage-block .answer, .mypage-block .comment {
+	font-size: 0.875rem;
+}
+
+.mypage-block .meta {
+	font-size: 0.75rem;
+	text-align: right;
+}
+
+/* === Orders & Product View === */
+.review-block {
+  background: #fff;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.mypage-block .content {
+	width: 100%;
+	max-width: 80rem;
+	padding: 2rem 1rem;
+	justify-content: center;
+}
+
+.mypage-block .title {
+	font-size: 1.5rem;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.mypage-block .order-section {
+	background-color: white;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	margin-bottom: 1.5rem;
+	text-align: center;
+}
+
+.mypage-block .order-date {
+	font-size: 0.875rem;
+	margin-bottom: 0.5rem;
+}
+
+.mypage-block .order-link {
+	display: block;
+	font-size: 0.875rem;
+	text-decoration: underline;
+	text-align: left;
+}
+
+.mypage-block .order-info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+.mypage-block .product-title {
+	font-size: 1.125rem;
+	font-weight: 600;
+}
+
+.mypage-block .product-detail {
+	font-size: 0.875rem;
+	margin-top: 0.25rem;
+}
+
+.mypage-block .button-group {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-top: 0.75rem;
+}
+
+.mypage-block .review-container {
+ max-width: 500px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mypage-block .title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.mypage-block .group {
+  margin-bottom: 1.5rem;
+}
+
+.mypage-block .label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.mypage-block .input-text,
+.mypage-block .textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #ccc;
+  border-radius: 0.375rem;
+  box-sizing: border-box;
+}
+
+
+.mypage-block .hint {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: gray;
+}
+
+.mypage-block .button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.mypage-block .action-button {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #999;
+  background-color: white;
+  color: black;
+  font-weight: 500;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.mypage-block .action-button:hover {
+  background-color: #f0ba7d;
+  color: white;
+}
+
+/* === Settings & Switches === */
+.mypage-block .setting-container {
+	max-width: 20rem;
+	margin: 2rem auto;
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+}
+
+.mypage-block .setting-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: black;
+	gap: 10rem
+}
+
+.mypage-block .switch {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+}
+
+.mypage-block .switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.mypage-block .slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: gray;
+	border-radius: 9999px;
+	transition: 0.4s;
+}
+
+.mypage-block .slider:before {
+	position: absolute;
+	content: "";
+	height: 18px;
+	width: 18px;
+	left: 3px;
+	bottom: 3px;
+	background-color: white;
+	border-radius: 50%;
+	transition: 0.4s;
+}
+
+/* === Gallery & Lightbox === */
+.mypage-block .gallery {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px;
+	padding: 20px;
+}
+
+.mypage-block .thumbnail {
+	width: 100%;
+	height: auto;
+	object-fit: cover;
+	cursor: pointer;
+	border-radius: 10px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mypage-block .thumbnail:hover {
+	transform: scale(1.03);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mypage-block .lightbox {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.85);
+	display: none;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+	flex-direction: column;
+	padding: 20px;
+}
+
+.mypage-block .lightbox.open {
+	display: flex;
+}
+
+.mypage-block .lightbox img {
+	max-width: 80%;
+	max-height: 60vh;
+	border-radius: 8px;
+	margin-bottom: 20px;
+}
+
+.mypage-block .lightbox .controls {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+
+.mypage-block .lightbox button {
+	padding: 8px 16px;
+	font-size: 14px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.mypage-block .lightbox .close {
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	font-size: 28px;
+	color: white;
+	cursor: pointer;
+}
+
+.mypage-block .lightbox .memo {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.mypage-block .lightbox input[type="file"] {
+	padding: 6px;
+}
+
+.mypage-block .lightbox input[type="text"] {
+	padding: 6px;
+	width: 200px;
+}
+
+/* === Media Queries === */
+@media ( max-width : 600px) {
+	.mypage-block .gallery {
+		grid-template-columns: repeat(1, 1fr);
+	}
+	.mypage-block .lightbox img {
+		max-width: 95%;
+		max-height: 50vh;
+	}
+	.mypage-block .lightbox .controls {
+		flex-direction: column;
+		align-items: center;
+	}
+	.mypage-block .lightbox input[type="text"] {
+		width: 90%;
+	}
+}
+
+/* === petAddinfo  === */
+.mypage-block {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 4rem 1rem;
+	background-color: #f9f9f9;
+}
+
+.mypage-block .container-petadd {
+	width: 100%;
+	max-width: 500px;
+	background-color: white;
+	padding: 2.5rem;
+	border-radius: 1rem;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.mypage-block h4 {
+	font-size: 1.75rem;
+	font-weight: bold;
+	margin-bottom: 2rem;
+	text-align: center;
+}
+
+.mypage-block form>* {
+	margin-bottom: 1rem;
+}
+
+.mypage-block .file-upload {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+}
+
+.mypage-block .file-upload img {
+	width: 120px;
+	height: 120px;
+	object-fit: cover;
+	border-radius: 0.5rem;
+	border: 1px solid #ccc;
+}
+
+.mypage-block .text, .mypage-block select {
+	width: 100%;
+	padding: 0.75rem;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 0.5rem;
+	box-sizing: border-box;
+}
+
+.mypage-block .pet-type {
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.mypage-block .pet-type button {
+	padding: 0.5rem 1rem;
+	border: 1px solid gray;
+	background: white;
+	border-radius: 9999px;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.mypage-block .pet-type button:hover {
+	background-color: #f0ba7d;
+}
+
+.mypage-block .radio-group {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+}
+
+.mypage-block .btn {
+	padding: 0.75rem;
+	font-size: 1rem;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	border: none;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	transition: 0.3s ease;
+}
+
+.mypage-block .btn:hover {
+	background-color: #f0ba7d;
+	color: white;
+}
+
+.mypage-block .btn, .mypage-block .text, .mypage-block .select {
+	height: 2.5rem;
+}
+
+/* === memberInfoUpdate  === */
+
+.mypage-block.member-update .container-mypageInfoUpdate {
+	width: 100%;
+	max-width: 500px;
+	background-color: white;
+	padding: 2.5rem;
+	border-radius: 1rem;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* === Text input field === */
+.mypage-block.member-update .input-text {
+  height: 2.5rem;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid black;
+  border-radius: 0.375rem;
+  outline: none;
+  flex: 1;
+  line-height: 1.2;
+}
+
+/* === Action button like 인증 / 중복체크 === */
+.mypage-block.member-update .input-button {
+  height: 2.5rem;
+  font-size: 0.75rem;
+  padding: 0 1rem;
+  border: 1px solid black;
+  border-radius: 9999px;
+  background: white;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* === Textarea field === */
+.mypage-block.member-update .textarea1 {
+  width: 100%;
+  height: auto;
+  min-height: 6rem;
+  resize: vertical;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid black;
+  border-radius: 0.375rem;
+  box-sizing: border-box;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+/* === Email Box === */
+.mypage-block.member-update .email-box {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid black;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+/* === Submit button === */
+.mypage-block.member-update .submit-button {
+  width: 100%;
+  padding: 0.75rem 0;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 9999px;
+  border: 1px solid black;
+  background: white;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+/* === 탈퇴 안내문 === */
+.mypage-block.member-update .footer-text {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}

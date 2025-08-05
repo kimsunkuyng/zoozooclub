@@ -1,0 +1,19 @@
+<!-- src/main/resources/templates/fragments/header.html -->
+<div class="header" th:fragment="header">
+    <!-- 상단 영역: 관리자 인사 -->
+    <div class="header-top">
+        <div id="sidebarToggle" class="hamburger">
+            &#9776;
+        </div>
+        <div class="header-center">🐶ZOOZOO클럽</div>
+        <div class="welcome-msg">
+            안녕하세요, <span th:text="${adminName} ?: '관리자'">관리자</span>님!
+        </div>
+    </div>
+
+    <!-- 하단 영역: 페이지 제목 -->
+    <div class="header-bottom">
+        <h1>관리자 페이지</h1>
+    </div>
+</div>
+

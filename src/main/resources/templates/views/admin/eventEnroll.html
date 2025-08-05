@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>이벤트 등록</title>
+
+    <!-- 정적 리소스 CSS -->
+    <link th:href="@{/styles/eventRegistration.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+
+            <div class="main-content">
+                <h2 class="page-title">이벤트 등록</h2>
+                <form class="event-form" method="post" enctype="multipart/form-data" th:action="@{/admin/eventEnroll}">
+                    <!-- 제목 -->
+                    <div class="form-group">
+                        <label for="event-title">제목</label>
+                        <input type="text" id="event-title" name="title" required placeholder="이벤트 제목 입력" />
+                    </div>
+
+                    <!-- 카테고리 -->
+                    <div class="form-group">
+                        <label for="event-category">카테고리</label>
+                        <select id="event-category" name="category" required>
+                            <option value="">카테고리를 선택하세요</option>
+                            <option value="sale">할인</option>
+                            <option value="notice">공지</option>
+                        </select>
+                    </div>
+
+                    <!-- 공개 여부 -->
+                    <div class="form-group">
+                        <label for="visibility">공개 여부</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="visibility" value="public" checked /> 공개</label>
+                            <label><input type="radio" name="visibility" value="private" /> 비공개</label>
+                        </div>
+                    </div>
+
+                    <!-- 내용 -->
+                    <div class="form-group">
+                        <label for="event-content">내용</label>
+                        <textarea id="event-content" name="content" rows="8" placeholder="이벤트 내용을 입력하세요."></textarea>
+                    </div>
+
+                    <!-- 첨부파일 -->
+                    <div class="form-group">
+                        <label for="event-file">첨부파일</label>
+                        <input type="file" id="event-file" name="file" />
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">등록 하기</button>
+                        <button type="reset" class="btn-reset">취소 하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/sidebar.js}"></script>
+</body>
+</html>

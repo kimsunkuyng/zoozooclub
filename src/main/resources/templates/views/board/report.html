@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>신고하기</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travelix Project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../../styles/report.css">
+<link rel="stylesheet" type="text/css" href="../../styles/report_responsive.css">
+</head>
+
+<body>
+
+<div class="super_container">
+	
+	<!-- Header -->
+
+	
+
+	<!-- Home -->
+	<div class="home" style="margin-top:50px; color:black;">
+  <h1 style="text-align:center;">신고하기</h1>
+  <hr />
+  <div class="report-writer" style="color:gray;"><strong>작성자 |</strong></div>
+  <div class="report-content" style="color:gray;"><strong>내용 | </strong></div>
+  <hr />
+
+  <div class="report-title">사유선택</div>
+  <div class="report-container">
+    <form id="reportform">
+      <details>
+        <summary><input type="radio" name="reason">스팸홍보/도배입니다.</summary>
+        <p>- 사행성 오락이나 도박을 홍보하거나 권장하는 내용 등의 부적절한 스팸 홍보 행위<br />
+          - 동일하거나 유사한 내용 반복 게시 음란물입니다.</p>
+      </details>
+      <details>
+        <summary><input type="radio" name="reason"> 음란물입니다.</summary>
+        <p>- 성적 수치심을 일으키는 내용 <br>
+          - 아동이나 청소년을 성 대상화한 표현<br>
+          - 과도하거나 의도적인 신체 노출<br>
+          - 음란한 행위와 관련된 부적절한 내용<br></p>
+      </details>
+      <details>
+        <summary><input type="radio" name="reason"> 불법정보를 포함하고 있습니다.</summary>
+        <p>- 불법 행위, 불법 링크에 대한 정보 제공<br>
+          - 불법 상품을 판매하거나 유도하는 내용<br></p>
+      </details>
+      <details>
+        <summary><input type="radio" name="reason"> 청소년에게 유해한 내용입니다.</summary>
+        <p>- 가출/왕따/학교폭력/자살 등 청소년에게 부정적인 영향을 조성하는 내용<br></p>
+      </details>
+      <details>
+        <summary><input type="radio" name="reason"> 욕설/혐오/차별적 표현입니다.</summary>
+        <p>- 직·간접적인 욕설을 사용하여 타인에게 모욕감을 주는 내용<br>
+          - 생명을 경시여기거나 비하하는 내용<br>
+          - 계층/지역/종교/성별 등을 혐오하거나 비하하는 표현<br>
+          - 신체/외모/취향 등을 경멸하는 표현<br></p>
+      </details>
+      <details>
+        <summary><input type="radio" name="reason"> 개인정보가 노출되었습니다.</summary>
+        <p>- 중요한 타인의 개인정보를 게재<br>
+          - 당사자 동의 없는 특정 개인을 인지할 수 있는 정보<br></p>
+      </details>
+      <details>
+        <summary><input type="radio" name="reason"> 불쾌한 표현이 있습니다.</summary>
+        <p>다른 사람에게 불쾌감을 줄 수 있는 표현입니다.</p>
+      </details>
+    </form>
+  </div>
+
+  <div class="report-enroll">
+    <button onclick="">신고하기</button>
+  </div>
+</div>
+</div>
+	
+	
+</body>
+
+</html>

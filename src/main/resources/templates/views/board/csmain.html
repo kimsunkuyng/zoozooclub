@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>상세페이지</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travelix Project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../../styles/csmain.css">
+<link rel="stylesheet" type="text/css" href="../../styles/csmain_responsive.css">
+
+</head>
+
+<body>
+
+<div class="supercontainer">
+	<div th:insert="~{views/common/header}"></div>
+	<div class="home" style="margin-top:150px; color: black;">
+  <hr style="margin:0;">
+  <form action="csmain" method="post" id="updform">
+  <div id="noticecontent"><h2 style="margin-top:20px;"th:text="'['+${Board.csTitle}+']'"></h2></div>
+  	 <th:block th:if="${session.loginUser != null and session.loginUser.memberNo == Board.memberNo}">
+	  	<button class="update btn" type="button" value="updateCsPost" id="updCsContent">수정</button>
+		
+		<input type="hidden" name="csMode" value="deleteCsPost" id="csContentInput">
+		<input type="hidden" name="csNo" th:value="${Board.csNo}">
+		
+		<button class="update btn" type="button" value="deleteCsPost" id="deleteCsContent">삭제</button>
+  	
+  	</th:block>
+  	</form>
+  <hr/>
+
+  <div class="intro" style="margin-top: 0; margin-bottom: 30px;">
+    <div class="intro_content">
+
+      <!-- 문의 정보 -->
+      <div class="csquestion">
+        <h3 ></h3>
+        <p><strong>작성자:</strong>[[${Board.memName}]]</p>
+        <p><strong>작성일:</strong>[[${Board.csDate}]]</p>
+        <p><strong>문의 내용:</strong></p>
+        <p>[[${Board.csContent}]]</p>
+      </div>
+
+      <!-- 이미지가 있을 경우 -->
+      <div class="csquestion_image">
+        <p><strong>첨부 파일:</strong></p>
+        <img th:src="@{/images/{file}(file=${Board.csImage})}" alt="첨부 이미지" width="300">
+      </div>
+
+    </div>
+  </div>
+  <!-- 관리자 답변 -->
+  <form id="replyform" action="csreplyinsert" method="post">
+      <div class="admin_reply">
+        <h4>관리자 답변</h4>
+        	<div class="intro_reply">
+        	 <input type="hidden" name="csNo"       th:value="${Board.csNo}" />
+        	<input type="hidden" name="refCsboardId" th:value="${Board.csNo}">
+        		<p th:if="${csReply == null}" id="noReply">아직 답변이 등록되지 않았습니다.</p>
+	        		
+	        		
+	        		<div th:if="${csReply != null}" id="reply">
+	        			<p th:text="${csReply.csReplyContent}"></p>
+	        		</div>	
+	        		  <th:block th:if="${session.loginUser != null and session.loginUser.isAdmin=='Y'}">
+		        		<div id="replyUpdate" style="display:none;">
+	      					<textarea id="csReplyContent" name="csReplyContent" rows="5" style="width:100%;" th:text="${csReply != null ? csReply.csReplyContent : ''}"></textarea>
+	    				</div>
+	  			</div>
+        		 </th:block>
+      	</div>
+</form>
+      <!-- 비밀번호 안내 -->
+      <div class="password_notice" th:if="${Board.csSecret == 'Y'}">
+        <p>※ 본 글은 비공개 1:1 문의입니다. 비밀번호를 입력한 본인만 열람할 수 있습니다.</p>
+      </div>
+
+	<!-- Footer -->
+
+	
+	</div>
+	</div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+	<div th:replace="views/common/footer"></div>
+<script th:inline="javascript">
+
+  window.onload = function () {
+    const updCsContent=document.getElementById('updCsContent');
+	const deleteCsContent=document.getElementById('deleteCsContent');
+    const updateCsReply=document.getElementById('updateCsReply');
+   	
+    
+    const writeBtn=document.getElementById('writeBtn');
+    const editBtn =document.getElementById('editBtn');
+    const deleteBtn=document.getElementById('deleteBtn');
+    const completeBtn = document.getElementById('completeBtn');
+    
+    const replyText=document.getElementById('reply');
+    const replyUpdate=document.getElementById('replyUpdate');
+    const noReply=document.getElementById('noReply');
+	
+	const csNo="[[${Board.csNo}]]";
+    
+    if(updCsContent !=null){
+    	updCsContent.addEventListener('click',()=>{
+    		location.href='/board/cswrite?csNo='+csNo;
+    	});
+    }
+    if(deleteCsContent !=null){
+    	deleteCsContent.addEventListener('click',()=>{
+    		const cancel=confirm('정말로 삭제하시겠습니까?');
+    		if(cancel){
+    			document.getElementById('updform').submit();
+    		}
+    	});
+    }
+    if (writeBtn) {
+        writeBtn.addEventListener('click', () => {
+          writeBtn.style.display = 'none';
+          if (noReply) noReply.style.display = 'none';
+          replyUpdate.style.display = 'block';
+          completeBtn.style.display = 'inline-block';
+        });
+      }
+
+      
+      if (editBtn) {
+        editBtn.addEventListener('click', () => {
+          replyText.style.display = 'none';
+          replyUpdate.style.display = 'block';
+
+          editBtn.style.display = 'none';
+          deleteBtn.style.display = 'none';
+          completeBtn.style.display = 'inline-block';
+        });
+      }
+
+      
+      if (completeBtn) {
+        completeBtn.addEventListener('click', () => {
+          replyText.style.display = 'block';
+          replyUpdate.style.display = 'none';
+
+          completeBtn.style.display = 'none';
+          if (editBtn) editBtn.style.display = 'inline-block';
+          if (deleteBtn) deleteBtn.style.display = 'inline-block';
+
+          document.getElementById('csContentInput').value = 'updateCsReply';
+          document.getElementById('updform').submit();
+        });
+        
+  }
+
+  }
+
+
+</script>
+</body>
+
+</html>

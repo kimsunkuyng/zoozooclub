@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원</title>
+    <link th:href="@{/styles/reportedPostManagement.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/footer.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+        <div class="content-area">
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+            <div class="main-content">
+                <div class="top-controls">
+                    <div class="right-control">
+                        <div class="search-box">
+                            <!-- 🔹 form추가: 검색 입력 + 검색 버튼 -->
+                            <form id="searchForm" th:action="@{/admin/reportedPostManagement}" method="get" style="display:inline;">
+                                <input type="text" name="keyword" placeholder="검색할 내용을 입력하세요" th:value="${keyword}" />
+                                <button type="submit">검색</button>
+                            </form>
+                            <!-- ⬇️ 삭제 버튼 추가 -->
+                            <button type="button" id="deleteReportBtn">삭제</button>
+                        </div>
+                    </div>
+                </div>
+                <form id="reportForm" method="post">
+                    <table class="reportedPostManagement-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="checkAll"></th>
+                                <th>신고번호</th>
+                                <th>게시글번호</th>
+                                <th>게시글제목</th>
+                                <th>신고자</th>
+                                <th>신고이유</th>
+                                <th>신고일</th>
+                                <th>삭제여부</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <tr th:each="r : ${reportList}">
+                                <td>
+                                    <input type="checkbox" name="reportNos" th:value="${r.reportNo}" class="row-check">
+                                </td>
+                                <td>[[${r.reportNo}]]</td>
+                                <td>[[${r.boardNo}]]</td>
+                                <td>[[${r.boardTitle}]]</td>
+                                <td>[[${r.reporterName}]]</td>
+                                <td>[[${r.reportReason}]]</td>
+                                <td>[[${#dates.format(r.reportDate, 'yyyy-MM-dd')}]]</td>
+                                <td>[[${r.isDelete}]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div th:replace="~{fragments/pagination :: pagination(pi=${pi}, keyword=${keyword})}"></div>
+        </div>
+    </div>
+    <script th:src="@{/js/sidebar.js}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkAll = document.getElementById('checkAll');
+        const rowChecks = document.querySelectorAll('.row-check');
+        checkAll.addEventListener('change', function() {
+            rowChecks.forEach(cb => cb.checked = checkAll.checked);
+        });
+        rowChecks.forEach(cb => {
+            cb.addEventListener('change', function() {
+                checkAll.checked = Array.from(rowChecks).every(c => c.checked);
+            });
+        });
+    });
+
+    document.getElementById('deleteReportBtn').addEventListener('click', function() {
+        const checked = document.querySelectorAll("input[name='reportNos']:checked");
+        if(checked.length === 0){
+            alert("삭제할 게시글을 선택하세요.");
+            return;
+        }
+        if(confirm("정말로 삭제하시겠습니까?")) {
+            document.getElementById('reportForm').action = '/admin/deleteReports';
+            document.getElementById('reportForm').submit();
+        }
+    });
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+          [[${msg} != null ? 'alert("' + ${msg} + '");' : '']]
+        /*]]>*/
+    </script>
+</body>
+</html>

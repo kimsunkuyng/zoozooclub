@@ -1,0 +1,174 @@
+/* 전체 기본 여백 제거 */
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* 오른쪽 콘텐츠 영역 (sidebar 제외) */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 콘텐츠 */
+.mainContent {
+    flex: 1;
+    padding: 20px 30px 30px 30px;
+    background-color: #fff;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-controls {
+    display: flex;
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center;
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    height: 20px; /* 높이를 크게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.left-control button {
+    padding: 10px 24px;
+    margin: 0 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-add {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-box input {
+    padding: 10px;
+    font-size: 14px;
+    width: 200px;
+    margin-right: 8px;
+}
+
+.search-box button {
+    padding: 10px 24px;
+    margin: 0 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #dddddd;
+}
+
+.product-list {
+    display: grid;
+    /* flex-direction: column;  세로 정렬 (열 1개) */
+    grid-template-columns: repeat(2, 1fr); /* 2열로 설정 */
+    gap: 20px;
+}
+
+.product-card {
+    display: flex;
+    border: 1px solid #ddd;
+    padding: 16px;
+    background-color: #fff;
+    height: 230px;
+    align-items: center;
+    box-sizing: border-box;
+    gap: 30px;
+}
+
+/* 공통 섹션 스타일 */
+.product-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 각 영역 비율 조절 */
+.section-id {
+    width: 10%;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.section-image {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-info {
+    width: 45%;
+}
+
+.section-actions {
+    width: 15%;
+    gap: 8px;
+}
+
+/* 이미지 예시 */
+.product-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1 / 1; /* 정사각형 비율 유지 */
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    object-fit: cover; /* 실제 이미지 사용 시 비율 유지하며 채움 */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+/* 상품 ID 텍스트 */
+.product-id {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* 버튼 정렬 */
+.section-actions button {
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    font-size: 12px;
+}
+
+.btn-submit,
+.btn-reset {
+    padding: 10px 24px;
+    margin: 0 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #dddddd;
+}

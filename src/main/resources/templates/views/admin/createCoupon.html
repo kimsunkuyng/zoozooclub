@@ -1,0 +1,77 @@
+<!-- src/main/resources/templates/views/admin/createCoupon.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>쿠폰 생성</title>
+
+    <!-- 정적 리소스 CSS -->
+    <link th:href="@{/styles/createCoupon.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+
+            <div class="main-content">
+                <h2 class="page-title">쿠폰 생성</h2>
+                <form class="coupon-form" method="post" th:action="@{/admin/createCoupon}">
+                    <!-- 쿠폰명 -->
+                    <div class="form-group">
+                        <label for="coupon-name">쿠폰명</label>
+                        <input type="text" id="coupon-name" name="name" placeholder="예: 여름 시즌 세일" maxlength="100" required />
+                    </div>
+
+                    <!-- 발행대상 -->
+                    <div class="form-group">
+                        <label for="target">발행대상</label>
+                        <select id="target" name="target" required>
+                            <option value="">대상을 선택하세요</option>
+                            <option value="all">전체회원</option>
+                            <option value="bronze">브론즈회원</option>
+                            <option value="silver">실버회원</option>
+                            <option value="gold">골드회원</option>
+                            <option value="diamond">다이아회원</option>
+                        </select>
+                    </div>
+
+                    <!-- 할인 퍼센트 -->
+                    <div class="form-group">
+                        <label for="discount">할인 퍼센트 (%)</label>
+                        <input type="number" id="discount" name="discount" placeholder="예: 10" min="1" max="100" required />
+                    </div>
+
+                    <!-- 사용 기간 -->
+                    <div class="form-group">
+                        <label for="period">사용 기간</label>
+                        <input type="date" id="period-start" name="startDate" required /> ~
+                        <input type="date" id="period-end" name="endDate" required />
+                    </div>
+
+                    <!-- 최소 주문 금액 -->
+                    <div class="form-group">
+                        <label for="min-order">최소 주문 금액 (원)</label>
+                        <input type="number" id="min-order" name="minOrderPrice" placeholder="예: 30000" min="0" required />
+                    </div>
+
+                </form>
+                    <!-- 버튼 -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">쿠폰 등록</button>
+                        <button type="reset" class="btn-reset">취소</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS 필요 시 -->
+    <script th:src="@{/js/sidebar.js}"></script>
+</body>
+</html>

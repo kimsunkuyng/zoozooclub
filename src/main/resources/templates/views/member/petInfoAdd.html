@@ -1,0 +1,63 @@
+<div class="mypage-block">
+<div class="container-petadd">
+  
+
+
+	<form th:action="@{/pet/addPet}" th:object="${pet}" method="post" enctype="multipart/form-data">
+    <!-- Image Upload -->
+    
+    <label class="file-upload" style="border: none;">
+      <h5>반려동물 등록</h5><br>
+      <img src="/images/petsSelfy.jpeg">
+      <span>사진업로드 <span style="font-size: 0.75rem; color: gray;">(1장만 가능)</span></span>
+      <input type="file" accept="image/*" style="display: none;" />
+    </label>
+
+	
+    <!-- Name -->
+    <input class="text" type="text" th:field="*{petName}" placeholder="이름" />
+
+    <!-- Birthdate -->
+    <input class="text" type="date" th:field="*{petBirthDay}" placeholder="반려동물의 생년월일을 입력해주세요" />
+
+    <!-- Pet Type -->
+    <div class="pet-type">
+    	<input type="hidden" th:field="*{petType}" />
+      	<button type="button" data-type="dog">강아지</button>
+      	<button type="button" data-type="cat">고양이</button>
+      	<button type="button" data-type="etc">기타</button>
+    </div>
+
+    <!-- Breed -->
+    <div class="select-wrapper">
+      <select th:field="*{petCategory}" id="breedSelect" required>
+        <option value="" disabled selected>품종을 선택하세요</option>
+      </select>
+    </div>
+
+    <!-- Gender -->
+    <div class="radio-group">
+      <label><input type="radio" th:field="*{gender}" value="M" /> 남아</label>
+      <label><input type="radio" th:field="*{gender}" value="F" /> 여아</label>
+    </div>
+
+    <!-- Neutered -->
+    <label style="display: flex; align-items: center; gap: 0.5rem;">
+      <input type="checkbox" th:field="*{neutered}" value="Y" />
+      <span>중성화 여부</span>
+    </label>
+
+    <!-- Weight -->
+    <input class="text" type="number" th:field="*{petWeight}" placeholder="몸무게(kg)" />
+
+    <!-- Submit / Cancel -->
+    <div style="display: flex; flex-direction: column; gap: 0.5rem; padding-top: 1rem;">
+      <button type="submit" class="btn" style="background: white;">등록</button>
+    </div>
+
+  </form>
+</div>
+</div>
+<script type="text/template" id="dynamic-script">
+  setupPetFormInteractions();
+</script>

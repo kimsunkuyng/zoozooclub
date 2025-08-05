@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원</title>
+    <link th:href="@{/styles/manageGrade.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/footer.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+    <div class="content-area">
+        <div th:replace="~{views/common/admin_header :: header}"></div>
+        <div class="main-content">
+            <div class="top-controls">
+                <div class="right-control">
+                    <div class="search-box">
+                        <input type="text" placeholder="회원검색" id="searchInput" />
+                        <button type="button" id="searchBtn">검색</button>
+                    </div>
+                    <button type="button" id="upgradeBtn" class="upgrade-btn">등업</button>
+                </div>
+            </div>
+            <form id="gradeForm">
+                <table class="manageGrade-table">
+                    <thead>
+                        <tr>
+                            <th class="cb-col">
+                                <input type="checkbox" id="checkAll"/>
+                            </th>
+                            <th>이름</th>
+                            <th>회원ID</th>
+                            <th>이메일</th>
+                            <th>등급</th>
+                            <th>전화번호</th>
+                            <th>관리자여부</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gradeTbody">
+                        <tr th:each="m: ${list}">
+                            <td>
+                                <input type="checkbox" class="row-check" name="memberNo" th:value="${m.memberNo}" />
+                            </td>
+                            <td>[[${m.memName}]]</td>
+                            <td>[[${m.memberId}]]</td>
+                            <td>[[${m.email}]]</td>
+                            <td>
+                                <select name="grade" class="grade-select" th:data-memberno="${m.memberNo}">
+                                    <option value="A" th:selected="${m.grade == 'A'}">A</option>
+                                    <option value="B" th:selected="${m.grade == 'B'}">B</option>
+                                    <option value="C" th:selected="${m.grade == 'C'}">C</option>
+                                    <option value="D" th:selected="${m.grade == 'D'}">D</option>
+                                </select>
+                            </td>
+                            <td>[[${m.phone}]]</td>
+                            <td>[[${m.isAdmin}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+              
+            </form>
+              <div th:replace="~{fragments/pagination :: pagination(pi=${pi})}"></div>
+     
+    </div>
+</div>
+
+<script th:src="@{/js/sidebar.js}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // 체크박스 전체 선택
+    function setCheckAllEvent() {
+        const checkAll = document.getElementById('checkAll');
+        const rowChecks = document.querySelectorAll('.row-check');
+        if (!checkAll) return;
+        checkAll.addEventListener('change', function() {
+            rowChecks.forEach(cb => cb.checked = checkAll.checked);
+        });
+        rowChecks.forEach(cb => {
+            cb.addEventListener('change', function() {
+                checkAll.checked = Array.from(rowChecks).every(c => c.checked);
+            });
+        });
+    }
+    setCheckAllEvent();
+
+    // 등업 버튼
+    document.getElementById('upgradeBtn').addEventListener('click', function () {
+        const selectedData = [];
+        document.querySelectorAll('.row-check:checked').forEach(cb => {
+            const memberNo = cb.value;
+            const grade = cb.closest('tr').querySelector('.grade-select').value;
+            selectedData.push({memberNo, grade});
+        });
+
+        if (selectedData.length === 0) {
+            alert("선택된 회원이 없습니다.");
+            return;
+        }
+
+        fetch("/admin/updateGrades", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(selectedData)
+        }).then(res => {
+            if (res.ok) {
+                alert("등급 변경 완료");
+                location.reload();
+            } else {
+                alert("등급 변경 실패");
+            }
+        });
+    });
+
+    // 검색 버튼
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const keyword = document.getElementById('searchInput').value.trim();
+        if (!keyword) {
+            alert("검색어를 입력하세요.");
+            return;
+        }
+
+        fetch(`/admin/searchMemberGrade?keyword=${encodeURIComponent(keyword)}`)
+            .then(res => res.json())
+            .then(list => {
+                const tbody = document.getElementById('gradeTbody');
+                tbody.innerHTML = '';
+
+                if(list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7">검색 결과가 없습니다.</td></tr>';
+                    return;
+                }
+
+                list.forEach(m => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <input type="checkbox" class="row-check" name="memberNo" value="${m.memberNo}" />
+                        </td>
+                        <td>${m.memName}</td>
+                        <td>${m.memberId}</td>
+                        <td>${m.email}</td>
+                        <td>
+                            <select name="grade" class="grade-select" data-memberno="${m.memberNo}">
+                                <option value="A" ${m.grade === 'A' ? 'selected' : ''}>A</option>
+                                <option value="B" ${m.grade === 'B' ? 'selected' : ''}>B</option>
+                                <option value="C" ${m.grade === 'C' ? 'selected' : ''}>C</option>
+                                <option value="D" ${m.grade === 'D' ? 'selected' : ''}>D</option>
+                            </select>
+                        </td>
+                        <td>${m.phone}</td>
+                        <td>${m.isAdmin}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                
+                // 동적 생성 행에도 체크박스 이벤트 재설정
+                setCheckAllEvent();
+            });
+    });
+});
+</script>
+</body>
+</html>

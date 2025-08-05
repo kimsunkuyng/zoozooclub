@@ -1,0 +1,41 @@
+<!-- src/main/resources/templates/views/common/sidebar.html -->
+<div class="sidebar" th:fragment="sidebar">
+    <h2>관리자 페이지</h2>
+    <div class="sidebarMenu">
+        <h4>회원 관리</h4>
+        <ul style="display: none">
+            <li><a th:href="@{/admin/memberList}">회원 조회</a></li>
+            <li><a th:href="@{/admin/manageGrade}">회원 등급관리</a></li>
+        </ul>
+
+        <h4>게시물 관리</h4>
+        <ul style="display: none">
+            <li><a th:href="@{/admin/noticeManagement}">공지사항 등록/삭제</a></li>
+            <li><a th:href="@{/admin/memberPostManagement}">회원 게시물 관리</a></li>
+            <li><a th:href="@{/admin/reportedPostManagement}">신고 게시물 관리</a></li>
+        </ul>
+
+        <h4>상품 관리</h4>
+        <ul style="display: none">
+            <li><a th:href="@{/admin/productList}">상품 등록/수정/삭제</a></li>
+        </ul>
+
+        <h4>결제 관리</h4>
+        <ul style="display: none">
+            <li><a th:href="@{/admin/paymentList}">결제 내역 조회</a></li>
+        </ul>
+
+        <h4>고객문의 관리</h4>
+        <ul style="display: none">
+            <li><a th:href="@{/admin/csList}">1:1 문의</a></li>
+            <li><a th:href="@{/admin/faq}">자주 묻는 질문</a></li>
+        </ul>
+
+        <h4>쿠폰 관리</h4>
+        <ul style="display: none">
+            <li><a th:href="@{/admin/eventEnroll}">이벤트 등록</a></li>
+            <li><a th:href="@{/admin/createCoupon}">쿠폰 생성 및 발급</a></li>
+        </ul>
+    </div>
+</div>
+

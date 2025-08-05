@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원 게시물 관리</title>
+    <link th:href="@{/styles/memberPostManagement.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/footer.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+        <div class="content-area">
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+            <div class="main-content">
+                <div class="top-controls">
+                    <div class="right-control">
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="검색할 내용을 입력하세요" />
+                            <button id="searchBtn" type="button">검색</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="memberPostManagement-table">
+                    <thead>
+                        <tr>
+                            <th>게시글번호</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>탈퇴여부</th>
+                            <th>등록일 날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody id="postTbody">
+                        <tr th:each="b: ${list}">
+                            <td>[[${b.boardNo}]]</td>
+                            <td>[[${b.boardTitle}]]</td>
+                            <td>[[${b.memName}]]</td>
+                            <td>[[${b.boardIsnotice}]]</td>
+                            <td>[[${b.boardDate}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:replace="~{fragments/pagination :: pagination(pi=${pi})}"></div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/sidebar.js}"></script>
+    <script>
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const keyword = document.getElementById('searchInput').value.trim();
+        if (!keyword) {
+            alert('검색어를 입력하세요.');
+            return;
+        }
+        fetch(`/admin/searchMemberPosts?keyword=${encodeURIComponent(keyword)}`)
+            .then(res => res.json())
+            .then(list => {
+                const tbody = document.getElementById('postTbody');
+                tbody.innerHTML = '';
+                if(list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5">검색 결과가 없습니다.</td></tr>';
+                    return;
+                }
+                list.forEach(b => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${b.boardNo}</td>
+                        <td>${b.boardTitle}</td>
+                        <td>${b.memName}</td>
+                        <td>${b.boardIsnotice}</td>
+                        <td>${b.boardDate}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+    });
+    </script>
+</body>
+</html>

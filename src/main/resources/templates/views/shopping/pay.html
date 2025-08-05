@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>결제 페이지</title>
+<script src="https://js.tosspayments.com/v2/standard"></script>
+<style>
+.pay-container {
+	width: 600px;
+	margin: 80px auto;
+	padding: 40px;
+	border: 1px solid #ccc;
+	border-radius: 12px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	font-family: 'Segoe UI', sans-serif;
+}
+
+.product-image {
+	width: 200px;
+	height: 200px;
+	object-fit: cover;
+	margin-bottom: 20px;
+}
+
+.pay-info {
+	margin-bottom: 20px;
+}
+
+.pay-info div {
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+
+.pay-button {
+	padding: 15px 30px;
+	background-color: #fbd066;
+	border: none;
+	color: black;
+	font-weight: bold;
+	font-size: 16px;
+	border-radius: 8px;
+	cursor: pointer;
+	width: 100%;
+}
+
+.pay-button:hover {
+	background-color: #e8be4f;
+}
+</style>
+</head>
+<body>
+	<div th:replace="~{views/common/header}"></div>
+
+	<div class="pay-container" style="margin-top: 200px;">
+		<h2>결제 정보</h2>
+
+		<!-- 상품 이미지 -->
+		<div th:if="${p != null}" style="text-align: center;">
+			<img th:src="@{/images/{img}(img=${p.productImage})}" alt="상품 이미지" class="product-image">
+		</div>
+
+		<div class="pay-info">
+			<div>
+				<strong>상품명:</strong> 
+				<span th:text="${p != null ? p.productName : '외 n개의 상품'}">상품명</span>
+			</div>
+			<div>
+				<strong>상품설명:</strong> 
+				<span th:text="${p != null ? p.productDescription : '...'}">상품 설명</span>
+			</div>
+			<div>
+				<strong>가격:</strong> 
+				<span id="final-price"
+					  th:text="${#numbers.formatInteger(T(java.lang.Integer).parseInt(param.totalPrice[0]), 3, 'COMMA')} + '원'">
+					  0원
+				</span>
+			</div>
+		</div>
+
+		<div class="pay-info">
+		  <h4 style="margin-top: 40px;">배송지 정보</h4>
+		  <div>
+		    <input type="text" id="address" name="address" placeholder="주소를 입력해주세요" style="width: 100%; padding: 8px;" required />
+		  </div>
+		</div>
+
+		<!-- 할인 쿠폰 -->
+	    <div th:each="coupon, stat : ${couponList}">
+	      <input type="checkbox"
+				 th:id="'coupon-box-' + ${stat.index}"
+				 th:attr="data-discount=${coupon.discountRate}" />
+	      <label th:for="'coupon-box-' + ${stat.index}">
+		      [[${coupon.couponTarget}]] 등급 회원을 위한 [ [[${coupon.couponName}]] ] : [[${coupon.discountRate}]]% 할인
+		  </label>
+	    </div>
+
+	    <!-- 결제 UI -->
+	    <div id="payment-method"></div>
+	    <div id="agreement"></div>
+	    <button class="pay-button" id="payment-button" style="margin-top: 30px">결제하기</button>
+	</div>
+
+	<div th:replace="~{views/common/footer}"></div>
+
+	<!-- JS 변수 -->
+	<script th:inline="javascript">
+		const pNo = /*[[${p != null ? p.productNo : 0}]]*/ 0;
+		const amount = /*[[${amount}]]*/ 1;
+		const cartNosRaw = /*[[${cartNos}]]*/ '';
+		const cartNos = cartNosRaw ? cartNosRaw.split(',') : [];
+		const totalPrice = Number('/*[[${totalPrice}]]*/') || 0;
+	</script>
+
+	<script>
+		function getUrlParam(key) {
+		    return new URLSearchParams(window.location.search).get(key);
+		}
+
+		main();
+
+		async function main() {
+		    const button = document.getElementById("payment-button");
+		    const couponBoxes = document.querySelectorAll("input[type='checkbox'][id^='coupon-box']");
+		    const rawPrice = parseInt(getUrlParam("totalPrice")) || 0;
+
+		    const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+		    const tossPayments = TossPayments(clientKey);
+		    const widgets = tossPayments.widgets({ customerKey: TossPayments.ANONYMOUS });
+			
+            let finalPrice = rawPrice;
+
+		    // 초기 금액 설정
+		    await widgets.setAmount({
+		        currency: "KRW",
+		        value: finalPrice
+		    });
+
+		    // 결제 UI 렌더링
+		    await Promise.all([
+		        widgets.renderPaymentMethods({ selector: "#payment-method", variantKey: "DEFAULT" }),
+		        widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
+		    ]);
+
+		    // 쿠폰 체크 이벤트
+		    couponBoxes.forEach(box => {
+		        box.addEventListener("change", async function () {
+		            let totalDiscountRate = 0;
+
+		            couponBoxes.forEach(cb => {
+		                if (cb.checked) {
+		                    totalDiscountRate += parseFloat(cb.dataset.discount) || 0;
+		                }
+		            });
+
+		            // 할인 적용 (소수점 버림 + 최소 1원)
+		            finalPrice = Math.max(1, Math.floor(rawPrice - (rawPrice * (totalDiscountRate / 100))));
+		            console.log("할인 적용 후 결제 금액:", finalPrice);
+
+		            // 결제 위젯 금액 변경
+		            await widgets.setAmount({
+		                currency: "KRW",
+		                value: finalPrice
+		            });
+
+		            // 화면 가격 표시 변경
+		            document.getElementById("final-price").textContent = finalPrice.toLocaleString() + "원";
+		        });
+		    });
+
+		    // 결제 버튼 클릭
+		    button.addEventListener("click", async function () {
+		        const address = document.getElementById("address").value;
+		        const encodedAddress = encodeURIComponent(address);
+
+		        let successUrl = `${window.location.origin}/shopping/confirm?address=${encodedAddress}&pNo=${pNo}&productAmount=${amount}&totalPrice=${finalPrice}`;
+		        
+		        if (cartNos && cartNos.length > 0) {
+		            successUrl += `&cartNos=${cartNos.join(',')}`;
+		        }
+
+		        await widgets.requestPayment({
+		            orderId: "order-" + new Date().getTime(),
+		            orderName: "상품 결제",
+		            successUrl: successUrl,
+		            failUrl: window.location.origin + "/fail.html"
+		        });
+		    });
+		}
+	</script>
+</body>
+</html>

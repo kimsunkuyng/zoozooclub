@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>1:1문의</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travelix Project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="../../styles/csboardlist.css">
+<link rel="stylesheet" type="text/css" href="../../styles/csboardlist_responsive.css">
+
+</head>
+
+<body>
+
+<div class="super_container">
+	<div th:replace="~{views/common/header}"></div>
+	
+
+
+	<!-- Home -->
+
+	<div class="home" style="margin-top:50px; color:black;" >
+		<div class="home_content">
+			<div class="maintitle"><h1>1:1문의</h1></div>
+			<p class="hellouser" th:if="${userName!= null}">
+	<span id="userID" th:text="${userName}"></span>님 반갑습니다~!
+	</p>
+		<hr>
+		<div class="search-area">
+	<div class="search">
+	<label for="sort">전 체 글</label>
+	<form action="csSort" method="get">
+		<select id="sort"name="csSortType" onchange="this.form.submit()">
+			<option value="latest" th:selected="${map['csSortType']=='latest'}">최신순</option>
+			<option value="open" th:selected="${map['csSortType']=='open'}">공개글만</option>
+			<option value="replycomplete"th:selected="${map['csSortType']=='replycomplete'}">답변완료</option>
+		</select>
+	</form>
+	
+	<div class="search-box">
+		<form action="csListSearch" method="get">
+			<input type="text" id="searchInput" name="csKeyword" placeholder="검색어입력" th:value="${map['csKeyword']}">
+			<button type="submit" id="searchBtn" onclick="handleSearch()">🔍︎</button>
+		</form>
+</div>
+</div>
+</div>
+<hr/>
+		</div>
+		
+		
+	</div>
+
+	<!-- Intro -->
+
+	<div class="intro" style="margin-top:0;padding-top:10px;">
+			<div class="intro_content">
+				<table>
+			      <thead>  
+			        <tr>
+			          <th>상품</th>
+			          <th>문의종류</th>
+			          <th>작성자</th>
+			          <th>공개범위</th>
+			          <th>날짜</th>
+			        </tr>
+			      </thead>
+			      <tbody>
+			        <tr th:each="c:${cslist}">
+			          <td>[[${c.csImage}]]</td>
+			          <td>[[${c.csTitle}]]</td>
+			          <td th:text="${#strings.length(c.memName) > 1 ? #strings.substring(c.memName, 0, 1) + '**' : c.memName}"></td>
+			          <td>[[${c.csSecret} == 'Y' ?'비밀':'공개']]</td>
+			          <td>[[${c.csDate}]]</td>
+			          
+			          <td style="display:none;">[[${c.csNo}]]</td>
+			        </tr>
+			        
+			      </tbody>
+    			</table>		
+			</div>
+		</div>
+	
+	<div class="write-button" style="text-align:right;">
+  <button th:if="${session.loginUser}" type="button"onclick="location.href='/board/cswrite'">글 쓰 기</button></div>
+
+	<!-- <div class="listpage">
+		<span>&laquo;</span>
+		<span class="page">1</span>
+		<span class="page">2</span>
+		<span class="page">3</span>
+		<span class="page">4</span>
+		<span class="page">5</span>
+		<span>&raquo;</span>
+	</div> -->
+	<div class="listpage">
+	<ul class="pagination">
+		<li class="list" th:if="${pi.startPage>1}">
+			<a class="page" th:href="@{${loc}(page=${pi.currentPage-10},csKeyword=${map['csKeyword']},csSortType=${map['csSortType']})}">
+				<span>&laquo;</span>
+			</a>
+		</li>
+		
+		<li class="list" th:each="p:${#numbers.sequence(pi.startPage,pi.endPage)}"
+						 th:if="${p<=pi.maxPage}" th:class="${p == pi.currentPage} ?'list active':'list'">
+			<a class="page" th:href="@{${loc}(page=${p},csKeyword=${map['csKeyword']},csSortType=${map['csSortType']})}">[[${p}]]</a>
+			
+		</li>
+		<li class="list" th:if="${pi.endPage<pi.maxPage}">
+			<a class="page" th:href="@{${loc}(page=${(pi.currentPage+10)>pi.maxPage ? pi.maxPage : pi.currentPage+10},csKeyword=${map['csKeyword']},csSortType=${map['csSortType']})}">
+				<span>&raquo;</span>
+			</a>
+		</li>
+	</ul>
+	</div>
+				
+				
+	<!-- Footer -->
+
+
+	<div th:replace="~{views/common/footer}"></div>
+</div>
+<script th:inline="javascript">
+	
+	function handleSearch() {
+		const keyword = document.getElementById("searchInput").value.trim();
+		if (keyword) {
+			location.href = `/board/cslist?keyword=${encodeURIComponent(keyword)}`;
+		} else {
+			alert("검색어를 입력하세요!");
+		}
+	}
+	document.getElementById("searchInput").addEventListener("keydown", function(e) {
+		if (e.key === "Enter") {
+			e.preventDefault(); // 엔터 눌렀을 때 기본 submit 방지
+			document.getElementById("searchBtn").click(); 
+		}
+	});
+	
+
+	window.onload=function(){
+		const rows=document.querySelectorAll("table tbody tr");
+		for(let i=0;i<rows.length;i++){
+			rows[i].style.cursor="pointer";
+			rows[i].addEventListener('click', e => {
+				const csNo = e.target.parentElement.children[5].innerText;
+				const isSecret = e.target.parentElement.children[3].innerText;
+				if(isSecret === '비밀'){
+					window.open("/board/secretPage?csNo="+csNo, "비밀글입니다", "width=500,height=600,resizable=no,scrollbars=yes");
+				}else{
+					window.location.href="/board/csmain?csNo="+csNo;
+				}
+			});
+		}
+	}
+	
+	
+</script>
+
+
+
+</body>
+
+</html>

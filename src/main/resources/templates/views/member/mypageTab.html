@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>🐶ZOOZOOCLUB_SHOPPING</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Travelix Project">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../styles/bootstrap4/bootstrap.min.css">
+	<link href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="../styles/offers_styles.css">
+	<link rel="stylesheet" type="text/css" href="../styles/offers_responsive.css">
+	<link rel="stylesheet" href="/styles/mypage.css">
+</head>
+	<style>
+	
+	.top_bar,
+	.topBlock {
+	  background-color: #F0BA7D; /* same as tab background */
+	}
+	
+	.top_bar {
+	  position: fixed;
+	  top: 100px;
+	  left: 0;
+	  right: 0;
+	  z-index: 100;
+	  background-color: #F0BA7D;
+	}
+	
+	.topBlock {
+	  height: 2.5rem;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  margin: 0;  /* or small margin-bottom */
+	}
+ 	
+    .tab {
+      width: 7rem;
+      height: 2rem;
+	  flex: none;
+      padding: 1px 15px;
+      background: #F0BA7D;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: rgb(78, 3, 3);
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+      border-radius: 30px;
+    }
+
+    .tab:hover {
+      background-color: rgba(245, 234, 172, 0.5); /*커서선택효과*/
+    }
+
+    .tab.active {
+      border-bottom: 3px solid #a74c02; /*음영컬러*/
+      font-weight: bold;
+      color: #a74c02; /*폰드컬러*/
+    }
+    .tab:focus {
+	  outline: none;
+	}
+	
+	.carousel-wrapper {
+	  width: 400px; /* or 100% if responsive */
+	  overflow: hidden;
+	  margin: auto;
+	}
+	
+	.carousel-inner {
+	  display: flex;
+	  transition: transform 0.3s ease-in-out;
+	  width: calc(100% * var(--total-cards));
+	}
+	
+	.pet-card {
+	  flex: 0 0 100%; /* show one card at a time */
+	  display: flex;
+	  align-items: center;
+	  gap: 2rem;
+	  padding: 1rem;
+	  border: 1px solid black;
+	  border-radius: 9999px;
+	}
+	
+	.pet-card img {
+	  width: 6rem;
+	  height: 6rem;
+	  object-fit: cover;
+	  border-radius: 1rem;
+	}
+	
+	.pet-info {
+	  text-align: left;
+	}
+	
+	.pet-info p {
+	  margin: 0;
+	}
+
+	
+	</style>
+
+
+<body>
+	<div th:replace="views/common/header"></div>
+		<div class="top_bar">
+		  <div class="topBlock">
+		    <button class="tab active" onclick="loadPage('/member/profile',event)">프로필</button>
+		    <button class="tab" onclick="loadPage('/member/couponPoint',event)">쿠폰포인트</button>
+		    <button class="tab" onclick="loadPage('/member/orderhistory',event)">쇼핑내역</button>
+		    <button class="tab" onclick="loadPage('/member/viewer',event)">팻갤러리</button>
+		    <button class="tab" onclick="loadPage('/member/myactivity',event)">나의활동</button>
+		    <button class="tab" onclick="loadPage('/member/setting',event)">설정</button>
+		  </div>
+		</div>
+	<div class="alarm-bar" hidden>
+    📸 Don’t forget to add today’s memory!
+  	</div>
+  	<div id="page-container"></div>
+  	
+  	<div th:replace="views/common/footer"></div>
+  	
+	
+	<script th:inline="javascript">
+	
+	
+	window.onload = function (){
+		loadPage("/member/profile");
+		
+	
+	};
+	
+	function loadPage(url, event) {
+	if(event){
+	  event.preventDefault(); // 미리 있던 디폴트 이벤트들을 제거해준다.
+	  
+	  // Remove active class from all tabs
+	  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+	  event.target.classList.add('active');
+	}
+
+	  
+	  fetch(url)
+	  .then(res => res.text())
+	  .then(html => {
+	    document.getElementById("page-container").innerHTML = html;
+
+	    const script = document.querySelector("#page-container #dynamic-script");
+	    if (script) {
+	      eval(script.textContent); // 👈 this triggers dynamic interaction
+	    }
+	    
+	     currentIndex = 0;
+	     setTimeout(() => {
+	       updateCarousel();
+	     }, 10);
+	  });
+	}
+	// ==================== review ========================ㅗ
+	function loadReview(url, event) {
+	  event.preventDefault();
+	
+	  const button = event.target;
+	  const wrapper = button.closest('.order-info').querySelector('.review-wrapper');
+	  const container = wrapper.querySelector('.review-container');
+	
+	  if (container.innerHTML.trim() === '') {
+	    fetch(url)
+	      .then(res => res.text())
+	      .then(html => {
+	        container.innerHTML = html;
+	        wrapper.style.display = 'block';
+	      });
+	  } else {
+	    wrapper.style.display = 'block';
+	  }
+	}
+	
+	function cancelReview() {
+	  const wrapper = event.target.closest('.review-wrapper');
+	  const container = wrapper.querySelector('.review-container');
+	  container.innerHTML = '';
+	  wrapper.style.display = 'none';
+	}
+	
+	
+	
+	let isIdValid = false;
+	const originalId = /*[[${session.loginUser.memberId}]]*/ "defaultId"; // Thymeleaf will replace this
+	console.log("originalId = ", originalId);
+
+	// 중복체크 버튼을 누를 때 호출됨
+	function checkId() {
+	  const memberId = document.getElementById("memberId").value.trim();
+	  const resultTag = document.getElementById("idCheckResult");
+
+	  if (memberId === originalId || (memberId === "" && originalId === "")) {
+	    resultTag.innerText = "현재 사용중인 아이디입니다.";
+	    isIdValid = true;
+	    return;
+	  }
+
+	  if (memberId === "" && originalId !== "") {
+	    resultTag.innerText = "아이디는 비워둘 수 없습니다.";
+	    isIdValid = false;
+	    return;
+	  }
+
+	  // 중복체크 요청
+	  fetch(`/member/checkId?memberId=${encodeURIComponent(memberId)}`)
+	    .then(response => response.text())
+	    .then(data => {
+	      if (data === "OK") {
+	        resultTag.innerText = "사용가능한 아이디입니다.";
+	        isIdValid = true;
+	      } else {
+	        resultTag.innerText = "사용 불가능한 아이디입니다.";
+	        document.getElementById("memberId").value ="";
+	        isIdValid = false;
+	      }
+	    })
+	    .catch(err => {
+	      console.error("ID check error:", err);
+	      resultTag.innerText = "서버 오류로 중복 확인 실패";
+	      isIdValid = false;
+	    });
+	}
+
+	// 최종 제출 전에 유효성 검사
+	function finalValidation() {
+	  const memberId = document.getElementById("memberId").value.trim();
+
+	  if (memberId === "" && originalId !== "") {
+	    alert("아이디를 비울 수 없습니다.");
+	    return false;
+	  }
+
+// 	  if (!isIdValid) {
+// 	    alert("아이디 중복체크를 해주세요.");
+// 	    return false;
+// 	  }
+
+	  return true;
+	}
+	
+	function showVerify(){
+		const phone = document.getElementById("phone").value;
+		
+		fetch("/send", {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({phone})
+		})
+		
+		const box = document.getElementById("verifyBox");
+		box.hidden = false;
+		
+		document.getElementById("verifyInput").focus();
+	}
+	
+	function verifyInputBtn(){
+		
+		const verifyNum = document.getElementById("verifyInput").value;
+		
+		fetch("/verify", {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({verifyNum})
+		})
+		
+		.then(response => response.text())
+		.then(data=> {
+			if(data =="Ok"){
+				clearInterval(interval);
+				document.getElementById('verifyBtn').innerText ="인증 완료";
+				fetch("/verifyUpdate", {
+				    method: "POST"
+				  }).then(res => res.text())
+				    .then(msg => console.log("Server session updated:", msg));
+				document.getElementById("verifyBox").hidden = true;
+			} else {
+				document.getElementById("smsSuccess").innerText ="인증에 실패하였습니다.";
+			}
+		
+		})
+
+	}
+	
+	let interval;
+	
+	function handleVerifyClick() {
+		  const button = document.getElementById('verifyBtn');
+		  		  
+		  showVerify();
+
+		  // Start countdown
+		  let seconds = 60;
+		  interval = setInterval(() => {
+		    seconds--;
+		    button.innerText = `${seconds}초후 활성화 `;
+
+		    if (seconds <= 0) {
+		      clearInterval(interval);
+		      button.disabled = false;
+		      button.innerText = "인증번호 받기";
+		    }
+		  }, 1000);
+		  
+		 // Disable the button
+		  button.disabled = true;
+		 
+		}
+	  function setupPetFormInteractions() {
+
+
+		    const breedOptions = {
+		      dog: ['말티즈', '푸들', '진돗개', '포메라니안', '시츄', '비숑 프리제', '요크셔 테리어', '골든 리트리버', '라브라도 리트리버', '프렌치 불도그'],
+		      cat: ['코리안 숏헤어', '러시안 블루', '샴', '스코티시 폴드', '브리티시 쇼트헤어', '페르시안', '랙돌', '메인쿤', '벵갈', '노르웨이 숲 고양이'],
+		      etc: ['햄스터', '기니피그', '토끼', '페럿', '슈가 글라이더','앵무새', '잉꼬', '카나리아', '러브버드', '왕관앵무','거북이', '레오파드 게코', '볼 파이톤', '청개구리', '도롱뇽','사슴벌레', '장수풍뎅이', '타란튤라', '지네', '전갈']
+		    };
+
+		    const buttons = document.querySelectorAll('.pet-type button');
+		    const select = document.getElementById('breedSelect');
+
+
+
+		    buttons.forEach(btn => {
+		      btn.addEventListener('click', () => {
+		        const type = btn.dataset.type;
+	
+		        select.innerHTML = '<option value="" disabled selected>품종을 선택하세요</option>';
+		        breedOptions[type].forEach(breed => {
+		          const opt = document.createElement('option');
+		          opt.value = breed;
+		          opt.textContent = breed;
+		          select.appendChild(opt);
+		        });
+		      });
+		    });
+		    
+		    
+		  }
+	  
+	  let currentIndex = 0;
+
+	  function updateCarousel() {
+	    const carousel = document.getElementById("petCarousel");
+	    const cards = carousel.children;
+	    const total = cards.length;
+
+	    if (currentIndex < 0) currentIndex = 0;
+	    if (currentIndex >= total) currentIndex = total - 1;
+
+	    // Set total width
+	    carousel.style.width = `${100 * total}%`;
+
+	    // Slide effect
+	    const offset = -currentIndex * (100 / total);
+	    carousel.style.transform = `translateX(${offset}%)`;
+
+	    // Set card width
+	    for (let card of cards) {
+	      card.style.flex = `0 0 ${100 / total}%`;
+	    }
+	  }
+
+	  function nextSlide() {
+	    currentIndex++;
+	    updateCarousel();
+	  }
+
+	  function prevSlide() {
+	    currentIndex--;
+	    updateCarousel();
+	  }
+
+	  // Run on first load (after dynamic content is loaded)
+	  window.addEventListener("load", updateCarousel);
+	</script>
+	
+</body>
+
+</html>

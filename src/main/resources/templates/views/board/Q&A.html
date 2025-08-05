@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>커뮤니티</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travelix Project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="../../styles/Q&A.css">
+<link rel="stylesheet" type="text/css" href="../../styles/Q&A_responsive.css">
+
+
+</head>
+
+<body>
+
+<div class="super_container">
+	<div th:replace="views/common/header"></div>
+	
+	<!-- Home -->
+
+	 <div class="home" style="margin-top:150px;color:black;">
+    <div class="maintitle"><h1>커뮤니티</h1></div>
+
+    <div class="search-box">
+    	<form action="QnASearch"method="get">
+      <input type="text" name="QnAKeyword" placeholder="검색어입력">
+      <button type="submit" onclick="submit()">🔍︎</button>
+      </form>
+    </div>
+    <hr>
+
+    <div class="slider-title">
+      <span><strong>인기글</strong></span>
+    </div>
+
+    <div class="slider-container">
+      <div class="slider-item"></div>
+      <div class="slider-item"></div>
+      <div class="slider-item"></div>
+      <div class="slider-item"></div>
+      <div class="slider-item"></div>
+    </div>
+
+    <hr>
+
+    <div class="sort-filter-row">
+      <div class="sort-options">
+        <label><input type="radio" name="sort" value="latest" checked>최신순</label>
+        <label style="margin-left: 20px;"><input type="radio" name="sort" value="oldest">등록순</label>
+      </div>
+
+      <div class="top-action-bar">
+        <button class="write-btn"onclick="writebtn">✏️ 글쓰기</button>
+        <select class="filter-dropdown">
+          <option>강아지</option>
+          <option>고양이</option>
+          <option>소동물</option>
+          <option>대형동물</option>
+        </select>
+        <span class="reset-btn" onclick="location.reload()">🔄 필터 초기화</span>
+      </div>
+    </div>
+
+    <div class="card-list">
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">강아지</span></div>
+          <div class="card-title">강아지 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="강아지 이미지">
+        </div>
+      </div>
+
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="card-content">
+          <div class="card-category"><span class="category-badge">고양이</span></div>
+          <div class="card-title">고양이 제목</div>
+          <div class="card-summary">글</div>
+          <div class="card-meta">
+            <span>작성자</span>
+            <span>답변: 1</span>
+            <span>3일 전</span>
+          </div>
+          <div class="card-tags">
+            <span>#태그</span>
+            <span>#태그</span>
+          </div>
+        </div>
+        <div class="card-image">
+          <img src="https://via.placeholder.com/100" alt="고양이 이미지">
+        </div>
+      </div>
+    </div>
+  </div>
+	
+	
+	
+	
+
+
+		
+		
+
+	
+	
+	
+
+	<div class="listpage">
+		<span>&laquo;</span>
+		<span class="page">1</span>
+		<span class="page">2</span>
+		<span class="page">3</span>
+		<span class="page">4</span>
+		<span class="page">5</span>
+		<span>&raquo;</span>
+	</div>
+	
+
+	
+			
+	<!-- Footer -->
+<div th:replace="views/common/footer"></div>
+	</div>	
+	
+<script th:inline="javascript">
+  const isLoggedIn = true; // 로그인 여부 설정 (true/false)
+
+  // 🔍 검색 처리
+  function handleSearch() {
+    const keyword = document.getElementById("searchInput").value.trim();
+    if (keyword) {
+      location.href = `/board/Q&A?keyword=${encodeURIComponent(keyword)}`;
+    } else {
+      alert("검색어를 입력하세요!");
+    }
+  }
+
+  // ✏️ 글쓰기 페이지 이동
+  function goToWritePage() {
+    if (isLoggedIn) {
+      window.location.href = "/board/Q&Awrite";
+    } else {
+      alert("비회원은 글을 작성하실 수 없습니다.");
+    }
+  }
+
+  // 📄 글 상세페이지 이동
+  function handleCardClick() {
+    if (isLoggedIn) {
+      window.location.href = "/board/Q&Amain";
+    } else {
+      alert("비회원은 글을 열람하실 수 없습니다.");
+    }
+  }
+
+  // 🎯 초기 바인딩
+  window.onload = function () {
+    // 1. 🔍 검색창 엔터 이벤트 바인딩
+    const searchInput = document.querySelector(".search-box input");
+    searchInput.id = "searchInput"; // id 설정 (없으면 이벤트 안 걸림)
+    searchInput.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSearch();
+      }
+    });
+
+    // 2. 🔍 버튼 클릭 시 검색
+    const searchBtn = document.querySelector(".search-box button");
+    searchBtn.id = "searchBtn";
+    searchBtn.onclick = handleSearch;
+
+    // 3. ✏️ 글쓰기 버튼 바인딩
+    const writeBtn = document.querySelector(".write-btn");
+    writeBtn.id = "writeBtn";
+    writeBtn.onclick = goToWritePage;
+
+    // 4. 📝 카드 클릭 시 상세보기 이동
+    const cards = document.querySelectorAll(".post-card");
+    cards.forEach(function (card) {
+      card.style.cursor = "pointer";
+      card.addEventListener("click", handleCardClick);
+    });
+  };
+</script>
+
+
+</body>
+
+</html>

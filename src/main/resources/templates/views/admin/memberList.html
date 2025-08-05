@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원</title>
+
+    <!-- 정적 리소스 CSS -->
+    <link th:href="@{/styles/memberList.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/footer.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+
+            <div class="main-content">
+                <div class="top-controls">
+                    <div class="right-control">
+                        <div class="search-box">
+                            <input type="text" placeholder="회원검색" id="searchInput"/>
+                            <button id="searchBtn" type="button">검색</button>
+                            <!-- 🟣 [추가] 수정/삭제 버튼 -->
+                            <button type="button" id="updateAdminBtn">관리자 여부 수정</button>
+                            <button type="button" id="deleteBtn">회원 삭제</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 🟣 [수정] form으로 감싸기 -->
+                <form id="memberForm" method="post">
+                <!-- 회원 테이블 -->
+                <table class="memberList-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="checkAll"/></th>
+                            <th>이름</th>
+                            <th>회원ID</th>
+                            <th>이메일</th>
+                            <th>삭제여부</th>
+                            <th>전화번호</th>
+                            <th>관리자여부</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="m: ${list}">
+                            <td>
+                                <!-- 🟣 [수정] value에 memberNo 추가 -->
+                                <input type="checkbox" class="row-check" name="memberNo" th:value="${m.memberNo}">
+                            </td>
+                            <td>[[${m.memName}]]</td>
+                            <td>[[${m.memberId}]]</td>
+                            <td>[[${m.email}]]</td>
+                            <td>[[${m.isDelete}]]</td>
+                            <td>[[${m.phone}]]</td>
+                            <td>
+                                <!-- 🟣 [수정] 관리자여부 select로 변경 -->
+                                <select name="isAdmin">
+                                    <option value="Y" th:selected="${m.isAdmin == 'Y'}">Y</option>
+                                    <option value="N" th:selected="${m.isAdmin == 'N'}">N</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </form>
+                <div th:replace="~{fragments/pagination :: pagination(pi=${pi})}"></div>
+            </div>
+
+        
+        </div>
+    </div>
+    <script th:src="@{/js/sidebar.js}"></script>
+    <script>
+    // 🟣 기존 체크박스 전체 선택/해제 유지
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkAll = document.getElementById('checkAll');
+        const rowChecks = document.querySelectorAll('.row-check');
+
+        checkAll.addEventListener('change', function() {
+            rowChecks.forEach(cb => cb.checked = checkAll.checked);
+        });
+        rowChecks.forEach(cb => {
+            cb.addEventListener('change', function() {
+                checkAll.checked = Array.from(rowChecks).every(c => c.checked);
+            });
+        });
+
+        // 🟣 [추가] 관리자여부 수정
+        document.getElementById('updateAdminBtn').addEventListener('click', function() {
+            const form = document.getElementById('memberForm');
+            const checked = document.querySelectorAll('.row-check:checked');
+            if (checked.length === 0) {
+                alert('수정할 회원을 선택하세요.');
+                return;
+            }
+            if (!confirm('관리자 여부를 변경하시겠습니까?')) return;
+
+            form.action = '/admin/updateAdminStatus';
+            form.method = 'post';
+            form.submit();
+        });
+
+        // 🟣 [추가] 회원 삭제
+        document.getElementById('deleteBtn').addEventListener('click', function() {
+            const form = document.getElementById('memberForm');
+            const checked = document.querySelectorAll('.row-check:checked');
+            if (checked.length === 0) {
+                alert('삭제할 회원을 선택하세요.');
+                return;
+            }
+            if (!confirm('정말로 삭제하시겠습니까?')) return;
+            form.action = '/admin/deleteMembers';
+            form.method = 'post';
+            form.submit();
+        });
+    });
+    </script>
+    
+    <script>
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const keyword = document.getElementById('searchInput').value.trim();
+        if (!keyword) {
+            alert("검색어를 입력하세요.");
+            return;
+        }
+
+        fetch(`/admin/searchMember?keyword=${encodeURIComponent(keyword)}`)
+            .then(res => res.json())
+            .then(list => {
+                const tbody = document.querySelector('.memberList-table tbody');
+                tbody.innerHTML = ''; // 기존 데이터 지움
+
+                if(list.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7">검색 결과가 없습니다.</td></tr>';
+                    return;
+                }
+
+                list.forEach(m => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><input type="checkbox" class="row-check" name="memberNo" value="${m.memberNo}"></td>
+                        <td>${m.memName}</td>
+                        <td>${m.memberId}</td>
+                        <td>${m.email}</td>
+                        <td>${m.isDelete}</td>
+                        <td>${m.phone}</td>
+                        <td>
+                            <select name="isAdmin">
+                                <option value="Y" ${m.isAdmin === 'Y' ? 'selected' : ''}>Y</option>
+                                <option value="N" ${m.isAdmin === 'N' ? 'selected' : ''}>N</option>
+                            </select>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+    });
+
+    </script>
+    
+</body>
+</html>

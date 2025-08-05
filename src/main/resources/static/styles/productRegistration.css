@@ -1,0 +1,106 @@
+/* 전체 기본 여백 제거 */
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* 오른쪽 콘텐츠 영역 (sidebar 제외) */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 콘텐츠 */
+.main-content {
+    padding: 30px;
+    max-width: 1500px;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.product-form {
+    width: 100%;
+    max-width: 1500px;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    display: table;
+}
+
+.form-group {
+    display: table-row;
+    border-bottom: 1px solid #ddd;
+}
+
+.form-group label {
+    display: table-cell;
+    width: 200px;
+    padding: 12px 16px;
+    background-color: #f9f9f9;
+    font-weight: 500;
+    vertical-align: middle;
+    border-right: 1px solid #ddd;
+}
+
+.form-group input[type='text'],
+.form-group input[type='number'],
+.form-group input[type='date'],
+.form-group input[type='file'],
+.form-group select,
+.form-group textarea {
+    display: inline-block;
+    width: 80%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group td,
+.form-group .input-cell {
+    display: table-cell;
+    padding: 12px 16px;
+    vertical-align: middle;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn-submit,
+.btn-reset {
+    padding: 10px 24px;
+    margin: 0 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-submit {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-reset {
+    background-color: #f44336;
+    color: white;
+}

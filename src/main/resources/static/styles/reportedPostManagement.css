@@ -1,0 +1,89 @@
+/* 전체 기본 여백 제거 */
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* 오른쪽 콘텐츠 영역 (sidebar 제외) */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 콘텐츠 */
+.main-content {
+    flex: 1;
+    padding: 20px 30px 30px 30px;
+    background-color: #fff;
+}
+
+.top-controls {
+    display: flex;
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center;
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    height: 20px; /* 높이를 크게 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-box input {
+    padding: 10px;
+    font-size: 14px;
+    width: 200px;
+    margin-right: 8px;
+}
+
+.search-box button {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+
+.reportedPostManagement-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+}
+
+.reportedPostManagement-table th,
+.reportedPostManagement-table td {
+    padding: 12px 16px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.reportedPostManagement-table thead {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.reportedPostManagement-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 12px;
+    color: white;
+}

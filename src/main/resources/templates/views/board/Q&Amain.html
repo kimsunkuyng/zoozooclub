@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>커뮤니티상세</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travelix Project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../../styles/Q&Amain.css">
+<link rel="stylesheet" type="text/css" href="../../styles/Q&Amain_responsive.css">
+
+
+</head>
+
+<body>
+
+<div class="super_container">
+	
+	<div th:replace="views/common/header"></div>
+
+	<!-- Home -->
+
+	<div class="home" style="margin-top:200px; color:black; padding-right:40px;" >
+		<hr>
+	<span id="noticecontent"><h2>큐앤에이잇어요</h2></span>
+	<hr/>
+		<div class="intro" style="margin-top:0;  margin-bottom: 100px;">
+			<div class="intro_content">
+				
+			
+			</div>
+		</div>
+	</div>
+	
+		<!-- 댓글 -->
+	<div class="commentsection">
+		<!-- 버튼영역 -->
+		<div class="comment-action">
+			<div class="left-action">
+				<label onclick="like()">♡좋아요</label>
+				<label onclick="comment()">⚉댓글</label>
+			</div>
+				<label onclick="openReportWindow()">신고</label>
+			
+		</div>
+		<hr/>
+		<div class="comment-list">
+			<div class="comment">
+			<div class="comment-radio">
+				<label><input type="radio" name="sort" value="latest" checked onchange="">최신순</label>
+				<label><input type="radio" name="sort" value="oldest" onchange="">등록순</label>
+				
+			</div>
+			
+				<div class="comment-profile">👤 앙!</div>
+				<div class="comment-content">댓글내용</div>
+			</div>
+			
+			<div class="reply">
+			<div class="comment-profile">ㄴ👤옹!</div>
+			<div class="comment-content">	답글내용</div>
+		</div>
+		
+		</div>
+		
+		<div class="comment-input">
+			<textarea rows="7" cols="50" placeholder="댓 글 을 입 력 해 주 세 요"></textarea>
+			<div class="comment-control">
+				<input type="file" id="fileupload"/>
+				<label onclick="enroll" class="enrollbtn">등록</label>
+			</div>
+			
+		</div>
+	</div>
+	
+	
+
+	<!-- Footer -->
+<div th:replace="views/common/footer"></div>
+	</div>
+	
+
+<script th:inline="javascript">
+function openReportWindow() {
+    window.open("/board/report", "신고하기", "width=500,height=600,left=200,top=100");
+  }
+</script>
+</body>
+
+</html>

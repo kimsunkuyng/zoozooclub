@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoozooclub.member.model.mapper.MemberMapper">
+	<select id="login" resultType="Member">
+		select *
+		from member
+		where MEMBER_ID = #{memberId} AND PASSWORD = #{password} and IS_DELETE = 'N'
+	</select>
+	<select id="socialLogin" resultType="Member">
+	select *
+	from member
+	where email = #{email} AND mem_name = #{memName} and IS_DELETE = 'N'
+	</select>
+	<update id="updateMember">
+	update member
+	<set>
+		<if test="memberId != null"> member_id = #{memberId},</if>
+		<if test="phone != null">phone = #{phone},</if>
+		<if test="userIntro != null">user_intro = #{userIntro},</if>
+		<if test="phoneVerify != null">phone_verify = #{phoneVerify},</if>
+	</set> 
+	where member_no =#{memberNo} 
+	</update>
+	<select id="checkId" resultType="_int">
+	SELECT COUNT(*)
+		from member
+		where MEMBER_ID = #{memberId} and IS_DELETE = 'N'
+	</select>
+	<update id="delete">
+	update member
+	set is_delete = 'Y'
+	where member_no =#{memberNo}
+	</update>
+	<select id="emailCheck" resultType="Member">
+		SELECT COUNT(*)
+		from member
+		where email = #{email}
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

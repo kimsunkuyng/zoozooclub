@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>펜시피스트 사료 상품 상세페이지</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="ZOOZOOCLUB 사료 상세페이지">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../../styles/bootstrap4/bootstrap.min.css">
+	<link href="../../plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="../../plugins/colorbox/colorbox.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../../styles/blog_styles.css">
+	<link rel="stylesheet" type="text/css" href="../../styles/blog_responsive.css">
+</head>
+
+<body>
+	<div th:replace="views/common/header"></div>
+		<!-- 메뉴 (모바일) -->
+		<div class="menu trans_500">
+			<div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
+				<div class="menu_close_container">
+					<div class="menu_close"></div>
+				</div>
+				<div class="logo menu_logo"><a href="#"><img src="../../images/logo.png" alt=""></a></div>
+				<ul>
+					<li class="menu_item"><a href="index.html">home</a></li>
+					<li class="menu_item"><a href="about.html">about us</a></li>
+					<li class="menu_item"><a href="offers.html">offers</a></li>
+					<li class="menu_item"><a href="#">news</a></li>
+					<li class="menu_item"><a href="contact.html">contact</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- Blog -->
+		<div class="blog" style="padding-top: 80px;">
+			<div class="container">
+				<div class="row justify-content-center" style="margin: 100px 0;">
+					<input id="pNo" type="hidden" th:value="${p.productNo}">
+						<div class="blog_post_container">
+							<div class="blog_post">
+							<h4>상품명</h4>
+							<h2>[[${p.productName}]]</h2>
+								<!-- 상세 상품 구성 -->
+								<div class="row mt-5">
+									<!-- 이미지 -->
+									<div class="col-lg-5">
+										<div style="background-color: #ccc; height: 500px; display: flex; align-items: center; justify-content: center;">
+											<img th:src="@{/images/{img}(img=${p.productImage})}" style="width: 100%; height: 100%; object-fit: cover;">
+										</div>
+									</div>
+
+									<!-- 상세 정보 -->
+									<div class="col-lg-7">
+										<!-- 리뷰 -->
+										<div class="mb-3">
+											<div class="border rounded p-3 bg-light">⭐ 리뷰 [[${rAvg}]] 점 ([[${rCount}]]개)</div>
+										</div>
+										<!-- 가격 -->
+										<div class="mb-3">
+											<div class="border rounded p-3"><strong>가격:</strong> [[${#numbers.formatInteger(p.productPrice, 3, 'COMMA')}]]원</div>
+										</div>
+										<div class="mb-3">
+											<div class="border rounded p-3">[[${p.productDescription}]]</div>
+										</div>
+
+<!-- 										옵션 -->
+<!-- 										<div class="mb-3"> -->
+<!-- 											<div class="border rounded p-3"> -->
+<!-- 												<label for="option-select"><strong>옵션 선택:</strong></label> -->
+<!-- 												<select id="option-select" class="form-control w-50 mt-2"> -->
+<!-- 													<option>소형견용</option> -->
+<!-- 													<option>중형견용</option> -->
+<!-- 													<option>대형견용</option> -->
+<!-- 												</select> -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+
+										<!-- 수량 -->
+										<div class="mb-3">
+											<div class="border rounded p-3">
+												<label for="qty-input"><strong>수량:</strong></label>
+												<input id="qty-input" type="number" value="1"
+													class="form-control w-25 mt-2" min="1">
+											</div>
+										</div>
+										<input type="hidden" id="product-price" th:value="${p.productPrice}">
+										<!-- 선택 결과 표시 -->
+										<div id="selected-info" class="mt-4 p-3 border rounded bg-light">
+											<strong>선택한 옵션 정보</strong><br>
+<!-- 											옵션: <span id="selected-option">소형견용</span><br> -->
+											수량: <span id="selected-qty">1</span><br/>
+											총 금액: <span id="total-price">[[${#numbers.formatInteger(p.productPrice, 3, 'COMMA')}]]</span>원
+										</div>
+
+										<!-- 배송 정보 -->
+										<div class="mb-4 mt-3">
+											<div class="border rounded p-3" style="height: 150px;">
+												<strong>배송 정보</strong><br>
+												· 서울, 경기도 기준 무료배송<br>
+												· 평일 기준 1~2일 내 출고<br>
+												· 택배사: CJ대한통운
+											</div>
+										</div>
+
+										<!-- 비로그인시-->
+										<div th:if="${session.loginUser == null}">
+											<div class="mb-3 d-flex" style="gap: 16px;">
+												<button onclick="login();" class="btn btn-outline-secondary px-4">장바구니 담기</button>
+												<button onclick="login();" class="btn btn-dark px-4" style="background-color: #fbd066; color: black; border: none;">바로 구매</button>
+											</div>
+											<div class="d-flex" style="gap: 16px;" th:if="${session.loginUser == null}">
+												<button class="btn btn-outline-secondary px-4" th:onclick="|location.href='/shopping/review?pNo=${p.productNo}'|">리뷰</button>
+												<button onclick="login();" class="btn btn-outline-secondary px-4">문의</button>
+											</div>
+										</div>
+										
+										<!-- 로그인시-->
+										<div th:if="${session.loginUser != null}">
+											<div class="mb-3 d-flex" style="gap: 16px;">
+												<button onclick="addToCart();" class="btn btn-outline-secondary px-4">장바구니 담기</button>
+												<button onclick="goToPayment()"
+												        class="btn btn-dark px-4"
+												        style="background-color: #fbd066; color: black; border: none;">
+												    바로 구매
+												</button>
+
+											</div>
+											<div class="d-flex" style="gap: 16px;">
+												<button class="btn btn-outline-secondary px-4" th:onclick="|location.href='/shopping/review?pNo=${p.productNo}'|">리뷰</button>
+												<button th:onclick="|location.href='@{/board/cswrite(pNo=${p.productNo})}'|"
+													        class="btn btn-outline-secondary px-4"
+													        th:if="${session.loginUser != null}">
+													    문의
+												</button>
+											</div>
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<div th:replace="views/common/footer"></div>
+	
+	<script th:inline="javascript">
+		const pNo = [[${p.productNo}]];
+	</script>
+	
+	<script>
+		<!-- 로그인 안내 -->
+		const login = () => {
+			alert("로그인 후 이용이 가능합니다.");
+			location.href = '/member/login';
+		}
+		
+		const addToCart = () => {
+			const amount = document.getElementById("qty-input").value;
+			const pNo = document.getElementById("pNo").value;
+			const productPrice = parseInt(document.getElementById("product-price").value);
+		    const totalPrice = amount * productPrice;
+			
+			if (confirm("장바구니에 담겼습니다.\n장바구니로 이동하시겠습니까?")) {
+		        // 확인 시 장바구니 페이지로 이동
+		        location.href = `/shopping/addCart?amount=${encodeURIComponent(amount)}&pNo=${pNo}&totalPrice=${totalPrice}`;
+		    } else {
+		        // 취소 시 쇼핑몰 리스트로 이동
+		        location.href = `/shopping/addList?amount=${encodeURIComponent(amount)}&pNo=${pNo}&totalPrice=${totalPrice}`;
+		    }
+		}
+		
+		document.addEventListener("DOMContentLoaded", function () {
+			const qtyInput = document.getElementById("qty-input");
+			const qtyText = document.getElementById("selected-qty");
+			const totalPriceText = document.getElementById("total-price");
+			const productPrice = parseInt(document.getElementById("product-price").value);
+			const pNo = document.getElementById("pNo").value;
+
+			function updateDisplay() {
+				const qty = parseInt(qtyInput.value);
+				const total = qty * productPrice;
+				qtyText.textContent = qty;
+				totalPriceText.textContent = total.toLocaleString(); // 콤마포맷
+			}
+
+			// 바로 구매 함수 추가
+			window.goToPayment = () => {
+				const qty = parseInt(qtyInput.value);
+				const total = qty * productPrice;
+				location.href = `/shopping/pay?pNo=${pNo}&amount=${qty}&totalPrice=${total}&pNo=${pNo}`;
+			};
+
+			qtyInput.addEventListener("input", updateDisplay);
+
+			updateDisplay(); // 초기값 반영
+		});
+
+	</script>
+
+</body>
+
+</html>

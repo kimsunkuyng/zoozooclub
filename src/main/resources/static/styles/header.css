@@ -1,0 +1,56 @@
+/* 전체 헤더 컨테이너 */
+.header {
+    height: 200px; /* 전체 높이 고정 */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 상단 영역 - 1/4 높이, 흰 배경 */
+.header-top {
+    height: 50px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 30px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    position: relative; /* 추가 */
+}
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bold;
+    font-size: 18px;
+    user-select: none;
+}
+
+/* header-top 내 햄버거 아이콘 */
+.hamburger {
+    font-size: 24px;
+    cursor: pointer;
+    user-select: none;
+    margin-right: auto; /* 왼쪽 정렬 */
+    padding-right: 5px;
+    padding-left: 0; /* 왼쪽 패딩 없앰 */
+    color: #333;
+}
+
+/* 하단 영역 - 3/4 높이, 기존 보라색 */
+.header-bottom {
+    height: 150px;
+    background-color: #6c63ff;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    color: white;
+}
+
+.header-bottom h1 {
+    margin: 0;
+    font-size: 24px;
+}

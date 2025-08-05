@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>장바구니</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css"
+	href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css"
+	href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css"
+	href="plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="styles/main_styles.css">
+<link rel="stylesheet" type="text/css" href="styles/responsive.css">
+
+<style>
+body {
+	background-color: #f9f9f9;
+	font-family: 'Noto Sans KR', sans-serif;
+	padding-top: 100px;
+}
+
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 1000;
+	background-color: #fff;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.cart-container {
+	max-width: 1100px;
+	margin: 160px auto 80px;
+	background: white;
+	padding: 30px;
+	border-radius: 10px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item {
+	display: flex;
+	align-items: center;
+	border: 1px solid #ddd;
+	padding: 15px;
+	margin-bottom: 20px;
+	border-radius: 8px;
+	background-color: #fff;
+}
+
+.cart-item input[type="checkbox"] {
+	margin-right: 15px;
+	transform: scale(1.3);
+}
+
+.item-image {
+	width: 100px;
+	height: 100px;
+	background-color: #eaeaea;
+	background-size: cover;
+	margin-right: 20px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	border-radius: 6px;
+}
+
+.item-details {
+	flex: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.item-info {
+	flex: 2;
+	min-width: 200px;
+}
+
+.item-info .title {
+	font-weight: bold;
+	font-size: 16px;
+	margin-bottom: 5px;
+	word-break: keep-all;
+}
+
+.item-info .price {
+	color: #555;
+}
+
+.item-option, .item-final {
+	flex: 1;
+	min-width: 100px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.cart-summary {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-top: 2px solid #eee;
+	padding-top: 20px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.cart-button {
+	background-color: #f0ba7d;
+	color: black;
+	border: none;
+	border-radius: 30px;
+	padding: 10px 30px;
+	font-size: 16px;
+	transition: background-color 0.3s;
+}
+
+.cart-button:hover {
+	background-color: #e5a93f;
+}
+</style>
+
+<div th:replace="~{views/common/header}"></div>
+</head>
+
+<body>
+	<div class="container cart-container">
+		<h3 class="mb-4 font-weight-bold">장바구니</h3>
+
+		<form id="checkout-form" th:action="@{/shopping/pay}" method="get">
+			<input type="hidden" name="cartNos" id="cartNosInput" /> <input
+				type="hidden" name="totalPrice" id="totalPriceInput" />
+
+			<div th:if="${not #lists.isEmpty(cList)}">
+				<div class="cart-item" th:each="c : ${cList}">
+					<input type="checkbox" checked onchange="updateTotal()" th:attr="data-price=${c.productPrice}, data-cartno=${c.cartNo}">
+					<div class="item-image" th:style="'background-image:url(' + @{/images/{file}(file=${c.productImage})} + ');'"></div>
+					<div class="item-details">
+						<div class="item-info">
+							<div class="title" th:text="${c.productName}"></div>
+							<div class="price">[[${#numbers.formatInteger(c.productPrice,3, 'COMMA')}]]원</div>
+						</div>
+						<div class="item-option">[[${c.cartAmount}]]개</div>
+						<div class="item-final"
+							th:attr="data-final-price=${c.cartAmount * c.productPrice}">
+							[[${#numbers.formatInteger(c.cartAmount * c.productPrice, 3,
+							'COMMA')}]]원</div>
+
+						<!-- ✅ 수정된 삭제 버튼 (submit 방지) -->
+						<button type="button"
+							th:onclick="|location.href='/shopping/deleteCart?cartNo=${c.cartNo}'|"
+							class="btn btn-outline-danger rounded-pill px-4 py-2">삭제</button>
+					</div>
+				</div>
+
+				<div class="cart-summary mt-4">
+					<div>
+						총합 가격: <span id="total-price">₩67,800</span>
+					</div>
+					<button type="button" class="cart-button"
+						onclick="proceedToCheckout()">주문 하기</button>
+				</div>
+			</div>
+
+			<div th:if="${#lists.isEmpty(cList)}">
+				<h3 style="text-align: center">장바구니에 담긴 상품이 존재하지 않습니다.</h3>
+			</div>
+		</form>
+	</div>
+
+	<div th:replace="~{views/common/footer}"></div>
+
+	<script>
+    // 총합 가격 업데이트
+    function updateTotal() {
+      const checkboxes = document.querySelectorAll('.cart-item input[type="checkbox"]');
+      const finalDivs = document.querySelectorAll('.item-final');
+      let total = 0;
+
+      checkboxes.forEach((cb, i) => {
+        if (cb.checked) {
+          const price = parseInt(finalDivs[i].dataset.finalPrice);
+          total += price;
+        }
+      });
+
+      document.getElementById('total-price').innerText = `₩${total.toLocaleString('ko-KR')}`;
+    }
+
+    // 주문 버튼 클릭 시
+   function proceedToCheckout() {
+	  const selectedCartNos = [];
+	  const checkboxes = document.querySelectorAll('.cart-item input[type="checkbox"]');
+	  const finalDivs = document.querySelectorAll('.item-final');
+	  let total = 0;
+	
+	  checkboxes.forEach((cb, i) => {
+	    if (cb.checked) {
+	      const cartNo = cb.dataset.cartno;
+	      selectedCartNos.push(cartNo);
+	      total += parseInt(finalDivs[i].dataset.finalPrice);
+	    }
+	  });
+	
+	  document.getElementById("cartNosInput").value = selectedCartNos.join(",");
+	  document.getElementById("totalPriceInput").value = total;
+	  document.getElementById("checkout-form").submit();
+	}
+
+
+    // 초기 실행
+    document.addEventListener('DOMContentLoaded', updateTotal);
+  </script>
+</body>
+</html>

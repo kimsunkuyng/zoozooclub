@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>리뷰 게시판</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="ZOOZOOCLUB 사료 상세페이지">
+
+	<!-- Bootstrap & Font Awesome -->
+	<link rel="stylesheet" type="../text/css" href="styles/bootstrap4/bootstrap.min.css">
+	<link rel="stylesheet" href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../plugins/colorbox/colorbox.css">
+	<link rel="stylesheet" type="../text/css" href="styles/blog_styles.css">
+	<link rel="stylesheet" type="../text/css" href="styles/blog_responsive.css">
+
+	<style>
+		.review-item {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 20px;
+			margin-bottom: 30px;
+			padding-bottom: 20px;
+			border-bottom: 1px solid #eee;
+		}
+
+		.review-img {
+			width: 150px;
+			height: 150px;
+			background-color: #f1f1f1;
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			border-radius: 8px;
+			flex-shrink: 0;
+		}
+
+		.review-content {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.review-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 8px;
+		}
+
+		.review-nickname {
+			font-weight: 600;
+			font-size: 16px;
+		}
+
+		.review-stars i {
+			color: #ffc107;
+			margin-right: 2px;
+		}
+
+		.review-text {
+			font-size: 15px;
+			color: #333;
+			line-height: 1.6;
+		}
+
+		@media (max-width: 576px) {
+			.review-item {
+				flex-direction: column;
+				align-items: center;
+			}
+
+			.review-content {
+				text-align: center;
+			}
+
+			.review-header {
+				flex-direction: column;
+				gap: 4px;
+			}
+		}
+	</style>
+</head>	
+	<div th:replace="views/common/header"></div>
+
+<body>
+
+	<!-- 본문 컨테이너 -->
+	<div class="super_container">
+		<div class="container my-5" style="padding-top: 200px;">
+			<div class="text-center my-5" th:if="${result > 0}">
+				<form th:action="@{/shopping/insertReview(pNo=${pNo})}" method="post">
+					<p>상품 구매에 만족하셨나요? 상품에 대한 리뷰를 남겨주세요.</p>
+					<textarea class="form-control" id="rContent" name="productReviewContent" rows="5" style="margin-top: 10px;" placeholder="리뷰를 입력해주세요..." required></textarea>
+					<div class="mb-4" style="margin-top: 25px;">
+				        <label for="rating" class="form-label">별점:   </label>
+				        <select name="productReviewRating" id="rating" class="form-select w-25">
+				          <option value="5">⭐ 5점</option>
+				          <option value="4">⭐ 4점</option>
+				          <option value="3">⭐ 3점</option>
+				          <option value="2">⭐ 2점</option>
+				          <option value="1">⭐ 1점</option>
+				        </select>
+				      </div>
+					<button class="btn btn-warning" style="width: 100px; height: 50px; font-size: 25px;color: white; margin-left: 1020px; margin-top: 10px; margin-bottom: 50px;">작성</button>
+				</form>		
+			</div>
+			<!-- 리뷰 -->
+			<div th:if="${rList != null}">
+				<div class="review-item" th:each="r : ${rList}">
+					<div class="review-img"  th:style="'background-image:url(' + @{/images/{img}(img=${r.productImage})} + ');'"></div>
+					<div class="review-content">
+						<div class="review-header">
+							<div class="review-nickname">
+								<span>[[${r.memName}]]</span>
+								<span style="color: black;"> ⭐ ([[${r.productReviewRating}]] 점)</span>
+							</div>
+<!-- 							<div class="review-stars"> -->
+<!-- 								<i class="fa fa-star"></i><i class="fa fa-star"></i> -->
+<!-- 								<i class="fa fa-star"></i><i class="fa fa-star"></i> -->
+<!-- 								<i class="fa fa-star"></i> -->
+<!-- 							</div> -->
+						</div>
+						<div class="review-text" th:text="${r.productReviewContent}"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:if="${rList == null}">
+			<h3 style="text-align: center; margin-top: 100px; margin-bottom: 300px">작성된 리뷰가 없습니다.</h3>
+		</div>
+	</div>
+	<div th:replace="views/common/footer"></div>
+</body>
+<script>
+	window.onload = () => {
+		
+		const rContent = document.getElementById('rContent');
+		const warning = document.getElementById('warning');
+		
+		rContent.addEventListener('change', function(){
+			if(rContent.value.trim() == ''){
+				warning.innerText = '리뷰 내용을 작성해주세요.';
+				warning.style.color = 'red';
+				warning.style.fontSize = '20px';
+			} else {
+				warning.innerText = '';
+			}
+		});
+		console.log(rContent);
+	}
+</script>
+</html>

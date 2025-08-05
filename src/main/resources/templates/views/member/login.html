@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>🐶ZOOZOOCLUB_SHOPPING</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Travelix Project">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../styles/bootstrap4/bootstrap.min.css">
+	<link href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="../styles/offers_styles.css">
+	<link rel="stylesheet" type="text/css" href="../styles/offers_responsive.css">
+</head>
+	<style>
+		.login-page * {
+		  box-sizing: border-box;
+		}
+		
+		.login-page {
+		  display: flex;
+		  justify-content: center;
+		  padding: 150px 20px 10px 20px;
+		  background: #f9f9f9;
+		}
+		
+		.login-container {
+		  background: white;
+		  border-radius: 1rem;
+		  padding: 2rem;
+		  width: 100%;
+		  max-width: 400px;
+		}
+		
+		.sns-button {
+		  position: relative;
+		  width: 100%;
+		  height: 35px;
+		  background: #f0ba7d;
+		  border: none;
+		  border-radius: 999px;
+		  font-weight: 600;
+		  font-size: 1rem;
+		  cursor: pointer;
+		  margin-bottom: 0.5rem;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  color: #333;
+		  padding: 0 1rem;
+		}
+		
+		.sns-logo {
+		  position: absolute;
+		  left: 1rem;
+		  width: 24px;
+		  height: 24px;
+		  object-fit: contain;
+		}
+		
+		.button-text {
+		  pointer-events: none;
+		}
+		
+		.divider {
+		  display: flex;
+		  align-items: center;
+		  margin: 1.5rem 0;
+		  color: #aaa;
+		  font-size: 0.875rem;
+		}
+		.divider div {
+		  flex: 1;
+		  height: 1px;
+		  background: #ccc;
+		}
+		.divider span {
+		  padding: 0 0.75rem;
+		  white-space: nowrap;
+		}
+		
+		.form-group {
+		  margin-bottom: 1.25rem;
+		}
+		.label {
+		  display: block;
+		  margin-bottom: 0.25rem;
+		  font-size: 0.875rem;
+		  font-weight: 500;
+		}
+		.input {
+		  width: 100%;
+		  padding: 0.5rem 0.75rem;
+		  border: 1px solid #ccc;
+		  border-radius: 0.5rem;
+		}
+		
+		.form-footer {
+		  display: flex;
+		  justify-content: space-between;
+		  align-items: center;
+		  font-size: 0.875rem;
+		  margin-bottom: 1rem;
+		}
+		.checkbox-label {
+		  display: flex;
+		  align-items: center;
+		  gap: 0.5rem;
+		}
+		
+		.footer-text {
+		  margin-top: 1.5rem;
+		  text-align: center;
+		  font-size: 0.875rem;
+		}
+	</style>
+
+<body>
+	<div th:replace="views/common/header"></div>
+	
+			<div class="login-page">
+		  <div class="login-container">
+		    <div class="social-login">
+		      <button class="sns-button" onclick="location.href='/oauth2/authorization/naver'">
+		        <img src="/logo/naver.svg" alt="naver" class="sns-logo">
+		        <span class="button-text">Naver로 로그인</span>
+		      </button>
+		      <button class="sns-button" onclick="location.href='/oauth2/authorization/google'">
+		        <img src="/logo/Google.svg" alt="google" class="sns-logo">
+		        <span class="button-text">Google 로그인</span>
+		      </button>
+		      <button class="sns-button" onclick="location.href='/oauth2/authorization/facebook'">
+		        <img src="/logo/facebook.svg" alt="facebook" class="sns-logo">
+		        <span class="button-text">Facebook으로 로그인</span>
+		      </button>
+		      <button class="sns-button" onclick="location.href='/oauth2/authorization/kakao'">
+		        <img src="/logo/KakaoTalk.svg" alt="KakaoTalk" class="sns-logo">
+		        <span class="button-text">KakaoTalk으로 로그인</span>
+		      </button>
+		    </div>
+		
+		    <div class="divider">
+		      <div></div>
+		      <span>또는 회원 아이디로 로그인</span>
+		      <div></div>
+		    </div>
+		
+		    <form action="/member/login" method="post">
+		      <div class="form-group">
+		        <label class="label">아이디</label>
+		        <input type="text" class="input" name="memberId" placeholder="아이디를 입력해주세요" required>
+		      </div>
+		      <div class="form-group">
+		        <label class="label">비밀번호</label>
+		        <input type="password" class="input" name="password" placeholder="••••••••" required>
+		      </div>
+		      <div class="form-footer">
+		        <label class="checkbox-label">
+		          <input type="checkbox"> <span>로그인 상태 유지</span>
+		        </label>
+		        <a href="#" class="link">비밀번호 찾기</a>
+		      </div>
+		      <button type="submit" class="sns-button submit-button">로그인</button>
+		    </form>
+		
+		    <p class="footer-text">
+		      계정이 없으신가요? <a href="/member/signup" class="link" style="font-weight: 500;">회원가입</a>
+		    </p>
+		  </div>
+		</div>
+	
+	<div th:replace="views/common/footer"></div>
+
+</body>
+
+</html>

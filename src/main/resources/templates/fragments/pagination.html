@@ -1,0 +1,24 @@
+<!-- templates/fragments/pagination.html -->
+<div th:fragment="pagination(pi)">
+    <div class="pagination-container">
+        <div class="pagination">
+            <button 
+                class="page-btn prev"
+                th:disabled="${pi.currentPage == 1}"
+                th:onclick="'location.href=\'?page=' + (${pi.currentPage - 1}) + '\';'">&laquo;</button>
+            <th:block th:each="p : ${#numbers.sequence(pi.startPage, pi.endPage)}">
+                <button
+                    class="page-btn"
+                    th:classappend="${pi.currentPage == p} ? 'active'"
+                    th:text="${p}"
+                    th:onclick="'location.href=\'?page=' + ${p} + '\';'">
+                </button>
+            </th:block>
+            <button 
+                class="page-btn next"
+                th:disabled="${pi.currentPage == pi.maxPage}"
+                th:onclick="'location.href=\'?page=' + (${pi.currentPage + 1}) + '\';'">&raquo;</button>
+        </div>
+    </div>
+</div>
+

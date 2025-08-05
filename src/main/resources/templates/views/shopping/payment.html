@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>결제 화면</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="ZOOZOOCLUB 결제화면">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+	<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+	<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+	<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+	<link rel="stylesheet" type="text/css" href="styles/main_styles.css">
+	<link rel="stylesheet" type="text/css" href="styles/responsive.css">
+
+	<style>
+		body {
+			font-family: 'Noto Sans KR', sans-serif;
+			background-color: #f8f9fa;
+		}
+
+		.container {
+			max-width: 1140px;
+		}
+
+		.card {
+			border: none;
+			border-radius: 10px;
+		}
+
+		.form-control {
+			border-radius: 8px;
+			padding: 10px;
+		}
+
+		.btn-block {
+			border-radius: 40px;
+			padding: 12px;
+			font-size: 16px;
+		}
+
+		img.img-fluid {
+			border-radius: 8px;
+		}
+
+		.price-text {
+			color: #e91e63;
+			font-size: 20px;
+		}
+
+		.payment-options {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.payment-option {
+			padding: 12px;
+			border: 2px solid #ddd;
+			border-radius: 8px;
+			cursor: pointer;
+			background-color: white;
+			transition: all 0.3s;
+		}
+
+		.payment-option:hover {
+			border-color: #fbd066;
+			background-color: #fff9e6;
+		}
+
+		.payment-option.active {
+			border-color: #fbd066;
+			background-color: #fff3cd;
+			font-weight: bold;
+		}
+
+		.payment-section {
+			padding-top: 200px;
+			padding-bottom: 60px;
+		}
+
+		input.form-control {
+			color: #000 !important;
+		}
+	</style>
+
+	<script>
+		// 결제 방식 선택 시 활성화 효과
+		document.addEventListener("DOMContentLoaded", function () {
+			const options = document.querySelectorAll(".payment-option");
+			options.forEach(opt => {
+				opt.addEventListener("click", () => {
+					options.forEach(o => o.classList.remove("active"));
+					opt.classList.add("active");
+					const radio = opt.querySelector("input[type='radio']");
+					if (radio) radio.checked = true;
+				});
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div th:replace="views/common/header"></div>
+	<!-- 결제 화면 -->
+	<section class="container payment-section">
+		<div class="row">
+			<!-- 상품 요약 -->
+			<div class="col-md-6 mb-4">
+				<div class="card p-3 shadow-sm">
+					<img src="images/test_main_02.jpg" class="img-fluid mb-3" alt="상품 이미지">
+					<h4>펜시피스트 프리미엄 사료</h4>
+					<p class="text-muted">냠냠사료(주)</p>
+					<p class="text-muted">1kg · 닭고기 베이스</p>
+					<div class="price-text mt-3">₩19,800</div>
+				</div>
+			</div>
+
+			<!-- 결제 정보 입력 -->
+			<div class="col-md-6">
+				<div class="card p-4 shadow-sm">
+					<h4 class="mb-3">배송 정보</h4>
+					<button type="button"
+						class="btn btn-outline-secondary btn-sm rounded-pill d-flex justify-content-center align-items-center"
+						style="width: 100px; height: 32px; padding: 0; text-align: center; font-size: 13px;"
+						onclick="fillDefaultAddress()">
+						기존 배송지 입력
+					</button>
+					<br />
+					<form method="POST" action="결제API실행!">
+						<div class="form-group">
+							<label for="name">이름</label>
+							<input type="text" class="form-control" id="name" name="name" required>
+						</div>
+						<div class="form-group">
+							<label for="phone">연락처</label>
+							<input type="tel" class="form-control" id="phone" name="phone" required>
+						</div>
+						<div class="form-group">
+							<label for="address">배송 주소</label>
+							<input type="text" class="form-control" id="address" name="address" required>
+						</div>
+
+						<hr class="my-4">
+
+						<h4 class="mb-3">결제 수단</h4>
+						<div class="payment-options">
+							<label class="payment-option active">
+								<input type="radio" name="paymentMethod" value="card" checked hidden>
+								신용/체크카드
+							</label>
+							<label class="payment-option">
+								<input type="radio" name="paymentMethod" value="account" hidden>
+								계좌이체
+							</label>
+						</div>
+						<div class="form-group mt-4">
+							<label style="font-weight: bold;">할인 정보</label>
+							<details id="couponToggle"
+								style="border: 1px solid #ccc; border-radius: 8px; padding: 10px;">
+								<summary style="cursor: pointer; font-weight: bold;">할인 정보</summary>
+								<div class="mt-3 d-flex flex-column gap-2">
+
+									<label class="d-flex align-items-center" style="gap: 10px; margin-left: 5px;">
+										<input type="radio" name="coupon" value="쿠폰A" style="margin: 0;">
+										<span>웰컴 쿠폰 3,000원 할인</span>
+									</label>
+
+									<label class="d-flex align-items-center" style="gap: 10px; margin-left: 5px;">
+										<input type="radio" name="coupon" value="쿠폰B" style="margin: 0;">
+										<span>A등급 회원을 위한 특별 10% 할인</span>
+									</label>
+
+								</div>
+							</details>
+						</div>
+
+
+						<!-- 상품 정보 -->
+						<input type="hidden" name="company" value="냠냠사료(주)">
+						<input type="hidden" name="productName" value="펜시피스트 프리미엄 사료">
+						<input type="hidden" name="amount" value="19800">
+
+						<button type="submit" class="btn btn-warning btn-block mt-4"
+							style="color:black; font-weight:bold;">
+							결제하기
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+	<div th:replace="views/common/footer"></div>
+</body>
+<script>
+	function fillDefaultAddress() {
+		document.getElementById("name").value = "홍길동";
+		document.getElementById("phone").value = "010-1111-1111";
+		document.getElementById("address").value = "어딘가 외딴곳";
+	}
+</script>
+
+</html>

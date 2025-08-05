@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>결제 실패</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f9f9f9;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .container {
+      display: inline-block;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #e74c3c;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .button {
+      margin-top: 30px;
+      padding: 12px 30px;
+      font-size: 1em;
+      border: none;
+      border-radius: 6px;
+      background-color: #fbd066;
+      color: black;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .button:hover {
+      background-color: #e6bc45;
+    }
+
+    .info {
+      margin-top: 20px;
+      font-size: 0.95em;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>결제에 실패했습니다 ❌</h1>
+    <p>
+      결제 과정에서 오류가 발생하여 주문이 완료되지 않았습니다.<br />
+      입력한 정보나 네트워크 상태를 다시 확인한 후<br />
+      다시 시도해 주세요.
+    </p>
+
+    <!-- (선택) 서버에서 전달한 메시지 출력 -->
+    <p class="info" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+    <button class="button" onclick="window.location.href='/'">홈으로 가기</button>
+  </div>
+
+</body>
+</html>

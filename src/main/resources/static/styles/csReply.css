@@ -1,0 +1,113 @@
+/* 전체 기본 여백 제거 */
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* 오른쪽 콘텐츠 영역 (sidebar 제외) */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 메인 콘텐츠 */
+.main-content {
+    flex: 1;
+    padding: 20px 30px 30px 30px;
+    background-color: #fff;
+}
+
+.inquiry-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.inquiry-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.inquiry-table th {
+    width: 150px;
+    background-color: #f4f4f4;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+    vertical-align: top;
+}
+
+.inquiry-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.inquiry-table textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    resize: vertical;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.inquiry-table input[type='radio'] {
+    margin-right: 5px;
+}
+
+.status-note {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #777;
+}
+
+.form-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-submit,
+.btn-cancel {
+    padding: 10px 24px;
+    margin: 0 8px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-submit {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-cancel {
+    background-color: red;
+    color: white;
+}
+
+.note {
+    font-size: 13px;
+    color: #666;
+    margin-top: 15px;
+    line-height: 1.4;
+}

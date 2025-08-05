@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>커뮤니티 작성</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Travelix Project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
+<link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="plugins/colorbox/colorbox.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="../../styles/Q&Awrite.css">
+<link rel="stylesheet" type="text/css" href="../../styles/Q&Awrite_responsive.css">
+</head>
+
+<body>
+
+<div class="super_container">
+	
+	<div th:replace="views/common/header"></div>
+
+	<!-- Home -->
+	<div class="communityhome"style="margin-top:200px; color:black;">
+	<div class="category-wrapper">
+		<span class="label">카테고리</span>
+		<div class="button-group">
+			 <button class="category-btn" onclick="selectCategory">🐶 강아지</button>
+		    <button class="category-btn" onclick="selectCategory">🐱 고양이</button>
+		    <button class="category-btn" onclick="selectCategory">🐰 소동물</button>
+		    <button class="category-btn" onclick="selectCategory">🌀 대형동물</button>
+		</div>
+	</div>
+		<div class="question-wrapper">
+			 <div class="question-title">
+	      <label class="label"for="title">글 작성</label>
+	    </div>
+	
+	    <div class="input-group">
+	      <input type="text" id="title" placeholder="제목을 입력해주세요" class="text-input"/>
+	    </div>
+	
+	    <div class="input-group">
+	      <textarea id="content" rows="4" placeholder="5자 이상의 내용을 입력해주세요" class="text-input"></textarea>
+	    </div>
+	
+	    <div class="tag-title">
+	      <label for="tag"style="font-size:20px;font-weight:bold;">태그 입력</label>
+	    </div>
+	
+	    <div class="input-tag">
+	      <input type="text" id="tag" placeholder="태그를 입력해주세요" class="text-input"/>
+	    </div>
+	
+	    
+		</div>
+		<div class="upload-section">
+    		<div class="photo-upload">
+      			<label for="photo" style="font-size:20px; font-weight:bold;">사진업로드</label><br />
+      				<input type="file" id="photo" accept="image/*" />
+				      <p class="photo-note"style=" font-size: 15px;">
+				        개당 업로드 용량: 20MB, 첨부 파일의 경우 사진과 동영상합쳐서 최대 10개 업로드 가능합니다.
+				      </p>
+    		</div>
+   			<div class="video-upload" style="margin-top: 20px;">
+      			<label for="video" style="font-size:20px;font-weight:bold;">동영상업로드</label><br />
+      				<input type="file" id="video" accept="video/*" />
+				      <p class="video-note" style=" font-size: 15px;">
+				        확장자: mp4만 허용, 용량: 500MB, 5분이내 / 최대 1개 업로드 가능합니다. <br />
+				        동영상에 사람이 등장할 경우, 시선처리 및 모자이크 처리 안된 상태의 원본을 제출하지 않으면 사용할 수 없습니다.
+				      </p>
+    		</div>
+  		</div>
+  		<div class="communityenroll">
+  			<button onclick="" class="enroll-btn">질문등록</button>
+  		</div>
+		
+	</div>
+	
+	<!-- Footer -->
+
+<div th:replace="views/common/footer"></div>
+	</div> 
+
+</body>
+
+</html>

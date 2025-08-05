@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CS 답변</title>
+
+    <!-- 정적 리소스 CSS -->
+    <link th:href="@{/styles/csReply.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/header.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/sidebar.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <!-- sidebar 조각 삽입 -->
+        <div th:replace="~{views/common/sidebar :: sidebar}"></div>
+
+        <div class="content-area">
+            <!-- header 조각 삽입 -->
+            <div th:replace="~{views/common/admin_header :: header}"></div>
+
+            <div class="main-content">
+                <h2 class="page-title">CS 답변</h2>
+                <form class="inquiry-form" method="post" th:action="@{/admin/csReply}">
+                    <table class="inquiry-table">
+                        <tr>
+                            <th>작성자</th>
+                            <td>황인호</td>
+                        </tr>
+                        <tr>
+                            <th>질문유형</th>
+                            <td>배송문의</td>
+                        </tr>
+                        <tr>
+                            <th>제목</th>
+                            <td>결제했는데 배송이 안와요</td>
+                        </tr>
+                        <tr>
+                            <th>질문내용</th>
+                            <td>일주일전에 애견용품을 결제했는데 아직도 배송시작이 안되었어요</td>
+                        </tr>
+                        <tr>
+                            <th>처리상태</th>
+                            <td>
+                                <label><input type="radio" name="status" value="unprocessed" /> 미처리</label>
+                                <label><input type="radio" name="status" value="processed" checked /> 처리완료</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>답변</th>
+                            <td><textarea name="reply" rows="6" placeholder="답변 내용을 입력하세요."></textarea></td>
+                        </tr>
+                    </table>
+
+                    <!-- 버튼 -->
+                    <div class="form-buttons">
+                        <button type="submit" class="btn-submit">답변 등록</button>
+                        <button type="reset" class="btn-cancel">취소하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/js/sidebar.js}"></script>
+</body>
+</html>

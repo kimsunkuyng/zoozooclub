@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>🐶ZOOZOOCLUB_SHOPPING</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Travelix Project">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../styles/bootstrap4/bootstrap.min.css">
+	<link href="../plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="../styles/offers_styles.css">
+	<link rel="stylesheet" type="text/css" href="../styles/offers_responsive.css">
+</head>
+	<style>
+	    .warning { color: red; }
+	    .success { color: green; }
+	    .invalid { background: yellow; }
+	    .message { display: block; margin-top: 4px; }
+		.signup-container {
+		  background: white;
+		  border-radius: 1rem;
+		  padding: 150px 20px 10px 20px;
+		  min-height: calc(100vh - 200px); /* estimate space minus header/footer height */
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  background: #f9f9f9;
+		}
+		
+		.sns-button {
+		  position: relative;
+		  width: 100%;
+		  height: 35px;
+		  background: #f0ba7d;
+		  border: none;
+		  border-radius: 999px;
+		  font-weight: 600;
+		  font-size: 1rem;
+		  cursor: pointer;
+		  margin-bottom: 0.5rem;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  color: #333;
+		  padding: 0 1rem;
+		}
+		
+		.sns-logo {
+		  position: absolute;
+		  left: 1rem;
+		  width: 24px;
+		  height: 24px;
+		  object-fit: contain;
+		}
+		
+		.button-text {
+		  pointer-events: none;
+		}
+		
+		.divider {
+		  display: flex;
+		  align-items: center;
+		  margin: 1.5rem 0;
+		  color: #aaa;
+		  font-size: 0.875rem;
+		}
+		.divider div {
+		  flex: 1;
+		  height: 1px;
+		  background: #ccc;
+		}
+		.divider span {
+		  padding: 0 0.75rem;
+		  white-space: nowrap;
+		}
+		
+		.form-group {
+		  margin-bottom: 1.25rem;
+		}
+		.label {
+		  display: block;
+		  margin-bottom: 0.25rem;
+		  font-size: 0.875rem;
+		  font-weight: 500;
+		}
+		.input {
+		  width: 100%;
+		  padding: 0.5rem 0.75rem;
+		  border: 1px solid #ccc;
+		  border-radius: 0.5rem;
+		}
+		
+		
+		.checkbox-label {
+		  display: flex;
+		  align-items: center;
+		  gap: 0.5rem;
+		}
+		
+	 </style>
+<body>
+	<div th:replace="views/common/header"></div>
+
+<!-- Signup content wrapper -->
+		  <div class="signup-container">
+		   <div>
+		    <div class="sns-buttons">
+		      <button class="sns-button" style="background-color: #03c75a; color: white;">
+		        <img th:src="@{/logo/naver.svg}" alt="naver" class="sns-logo">
+		        <span class="button-text">Naver로 시작하기</span>
+		      </button>
+		      <button class="sns-button" style="background-color: white; color: #555; border: 1px solid #ddd;">
+		        <img th:src="@{/logo/Google.svg}" alt="google" class="sns-logo">
+		        <span class="button-text">Google 시작하기</span>
+		      </button>
+		      <button class="sns-button" style="background-color: blue; color: white;">
+		        <img th:src="@{/logo/facebook.svg}" alt="Instagram" class="sns-logo">
+		        <span class="button-text">Facebook으로 시작하기</span>
+		      </button>
+		      <button class="sns-button" style="background-color: #fee500; color: #3c1e1e;">
+		        <img th:src="@{/logo/KakaoTalk.svg}" alt="KakaoTalk" class="sns-logo">
+		        <span class="button-text">KakaoTalk으로 시작하기</span>
+		      </button>
+		    </div>
+		
+		    <div class="divider">
+		      <div></div>
+		      <span>또는 이메일로 회원가입</span>
+		      <div></div>
+		    </div>
+
+		    <form action="/member/signup" method="post"  onsubmit="return validateForm();">
+		      <div class="form-group">
+		        <label class="label" for="email">이메일</label>
+		        <input type="email" class="input" name="email" placeholder="이메일을 입력해주세요" 
+		        id="email" onblur="checkEmail();" onkeydown = "if(event.key === 'Enter') checkEmail();" required>
+		        <label id ="emailCheckResult" ></label>
+		      </div>
+		      
+		      <div class="form-group">
+		        <label class="label" for="ids">아이디</label>
+		        <input type="text" class="input" name="memberId" placeholder="아이디를 입력해주세요" 
+		        id="ids" onblur="checkId();" onkeydown = "if(event.key === 'Enter') checkId();" required>
+		        <label id ="idCheckResult" ></label>
+		      </div>
+		
+		      <div class="form-group">
+		        <label class="label" for="pwd">비밀번호</label>
+		        <input type="password" id ="pwd" onkeydown = "if(event.key === 'Enter') pwdValid();" onblur ="pwdValid();"
+		        name="password" class="input" placeholder="비밀번호" required>
+		        <label id ="pwdMsg"></label>
+		      </div>
+		
+		      <div class="form-group">
+		        <label class="label" for="pwdCfm">비밀번호 확인</label>
+		        <input type="password" id ="pwdCfm" onkeydown = "if(event.key === 'Enter') pwdCheckConfirm();" onblur ="pwdCheckConfirm();" 
+        		class="input" placeholder="비밀번호 확인" required>
+        		<label id ="pwdCfmMsg"></label>
+		      </div>
+		
+		      <div class="form-group">
+		        <label class="checkbox-label"><input type="checkbox" id="checkAll"><span>모두 동의</span></label>
+		        <label class="checkbox-label"><input type="checkbox" class="agree-check"><span>이용약관 동의</span><span>내용보기</span></label>
+		        <label class="checkbox-label"><input type="checkbox" class="agree-check"><span>개인정보 수집 및 이용 동의</span><span>내용보기</span></label>
+		        <label class="checkbox-label"><input type="checkbox" class="agree-check"><span>만 14세 이상입니다</span></label>
+		        <label class="checkbox-label"><input type="checkbox" class="agree-check"><span>(선택) 마케팅 정보 수신 동의</span><span>내용보기</span></label>
+		      </div>
+		
+		      <p class="warning">※ 필수 동의사항에 체크해야 회원가입이 가능합니다</p>
+		
+		      <button type="submit" class="sns-button" style="background: #333; color: white;">회원가입</button>
+		    </form>
+		  </div>
+		 </div> 
+
+	<div th:replace="views/common/footer"></div>
+	
+<script>
+	const $ = id => document.getElementById(id);
+	
+	const msg = {
+	  pwdOk: "사용가능한 비밀번호입니다.",
+	  match: "비밀 번호가 일치합니다.",
+	  misMatch: "비밀 번호가 일치하지 않습니다.",
+	  success: "회원가입이 성공적으로 완료되었습니다^^",
+	  empty: " 항목을 입력해주세요.",
+	  rule: "영문,숫자,특수기호(!@#$%^&)포함 10자리 이상."
+	};
+	
+	function checkEmail() {
+	  const email = $('email').value.trim();
+	  const resultTag = $("emailCheckResult");
+	
+	  if (!email) return;
+	
+	  fetch(`/member/checkEmail?email=${encodeURIComponent(email)}`)
+	    .then(response => response.text())
+	    .then(data => {
+	      if (data === "OK") {
+	        resultTag.innerText = "사용가능한 이메일입니다.";
+	        resultTag.className = "success";
+	      } else {
+	        resultTag.innerText = "사용 불가능한  이메일입니다.";
+	        resultTag.className = "warning";
+	        $('email').value = "";
+	      }
+	    })
+	    .catch(err => {
+	      resultTag.innerText = "서버 오류로 이메일 확인 실패";
+	      resultTag.className = "warning";
+	    });
+	}
+	
+	function checkId() {
+	  const memberId = $('ids').value.trim();
+	  const resultTag = $("idCheckResult");
+	
+	  if (!memberId) return;
+	
+	  fetch(`/member/newIdCheck?memberId=${encodeURIComponent(memberId)}`)
+	    .then(response => response.text())
+	    .then(data => {
+	      if (data === "OK") {
+	        resultTag.innerText = "사용가능한 아이디입니다.";
+	        resultTag.className = "success";
+	      } else {
+	        resultTag.innerText = "사용 불가능한 아이디입니다.";
+	        resultTag.className = "warning";
+	        $('ids').value = "";
+	      }
+	    })
+	    .catch(err => {
+	      resultTag.innerText = "서버 오류로 중복 확인 실패";
+	      resultTag.className = "warning";
+	    });
+	}
+	
+	function showMessage(id, key, color) {
+	  const tag = $(id);
+	  tag.innerText = msg[key];
+	  tag.style.color = color;
+	}
+	
+	function pwdValid() {
+	  const input = $('pwd');
+	  const value = input.value;
+	  const hasSpecial = /[()!@#$%^&]/.test(value);
+	  const hasLetter = /[a-zA-Z]/.test(value);
+	  const isLongEnough = value.length >= 10;
+	
+	  if (hasSpecial && hasLetter && isLongEnough) {
+	    showMessage('pwdMsg', 'pwdOk', 'green');
+	    $('pwdCfm').focus();
+	    return true;
+	  } else {
+	    showMessage('pwdMsg', 'rule', 'red');
+	    input.value = "";
+	    return false;
+	  }
+	}
+	
+	function pwdCheckConfirm() {
+	  const pwd = $('pwd').value;
+	  const cfm = $('pwdCfm').value;
+	
+	  if (!pwd) {
+	    showMessage('pwdCfmMsg', 'rule', 'red');
+	    return false;
+	  }
+	
+	  if (pwd === cfm) {
+	    showMessage('pwdCfmMsg', 'match', 'green');
+	    return true;
+	  } else {
+	    showMessage('pwdCfmMsg', 'misMatch', 'red');
+	    $('pwdCfm').value = "";
+	    return false;
+	  }
+	}
+	
+	function validateForm() {
+	  let valid = true;
+	
+	  // Email check
+	  if ($('email').value.trim() === "") {
+	    alert("이메일을 입력해주세요.");
+	    $('email').focus();
+	    return false;
+	  }
+	
+	  // ID check
+	  if ($('ids').value.trim() === "") {
+	    alert("아이디를 입력해주세요.");
+	    $('ids').focus();
+	    return false;
+	  }
+	
+	  // Password validation
+	  if (!pwdValid()) {
+	    $('pwd').focus();
+	    return false;
+	  }
+	
+	  // Password confirmation
+	  if (!pwdCheckConfirm()) {
+	    $('pwdCfm').focus();
+	    return false;
+	  }
+	
+	  // Required checkboxes
+	  const requiredChecks = document.querySelectorAll(".agree-check:not(:last-child)");
+	  const allChecked = Array.from(requiredChecks).every(cb => cb.checked);
+	
+	  if (!allChecked) {
+	    alert("필수 약관에 모두 동의해주세요.");
+	    return false;
+	  }
+	
+	  return valid;
+	}
+	
+	// Checkbox group logic
+	document.addEventListener("DOMContentLoaded", function () {
+	  const checkAll = $("checkAll");
+	  const agreeChecks = document.querySelectorAll(".agree-check");
+	  const allLabels = document.querySelectorAll(".checkbox-label");
+	
+	  function updateLabelColors() {
+	    allLabels.forEach(label => {
+	      const input = label.querySelector("input[type='checkbox']");
+	      const spans = label.querySelectorAll("span");
+	      spans.forEach(span => {
+	        span.style.color = input.checked ? "black" : "#555";
+	      });
+	    });
+	  }
+	
+	  checkAll.addEventListener("change", () => {
+	    agreeChecks.forEach(cb => cb.checked = checkAll.checked);
+	    updateLabelColors();
+	  });
+	
+	  agreeChecks.forEach(cb => {
+	    cb.addEventListener("change", () => {
+	      const allChecked = Array.from(agreeChecks).every(cb => cb.checked);
+	      checkAll.checked = allChecked;
+	      updateLabelColors();
+	    });
+	  });
+	
+	  updateLabelColors();
+	});
+
+    
+</script> 
+
+</body>
+
+</html>

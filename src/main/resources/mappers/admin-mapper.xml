@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoozooclub.admin.model.mapper.AdminMapper">
+	
+	<select id="getOrderCount" resultType="int">
+		select count(*)
+		from orders
+	</select>
+	
+	<select id="selectOrderList" resultType="AdminOrder">
+		select *
+		from orders
+			join member using(member_no)
+		order by order_no desc
+	</select>
+	
+	<select id="selectOrder">
+		select *
+		from orders
+		where order_no = #{orderNo}
+	</select>
+	
+	<select id="getProductCount" resultType="int">
+		select count(*)
+		from product
+	</select>
+	
+	<select id="selectProductList">
+		select *
+		from product
+		order by product_no desc
+	</select>
+	
+	<insert id="enrollProduct">
+	<!-- selectKey : insert/update 시 사용할 값을 조회해서 객체의 지정된 필드에 대입 
+			order	: sql문이 실행되기 전/후에 selectKey가 수행되도록 지정
+			keyProperty : selectKey 조회결과를 저장할 필드
+	-->
+		<selectKey order="BEFORE" keyProperty="productNo" resultType="int">
+			select product_seq.nextval from dual
+		</selectKey>
+	
+		insert into product
+		values(#{productNo}, #{productName}, #{productPrice}, #{productCategory}, 
+				#{productDescription}, #{productCompany}, #{productStock}, default)
+	</insert>
+	
+	<delete id="deleteProduct">
+		delete from product
+		where product_no = #{pId}
+	</delete>
+	
+	<select id="getCsCount">
+		select count(*)
+		from cs_board
+	</select>
+	
+	<select id="selectCsList">
+		select *
+		from cs_board
+			join member using(member_no)
+		order by cs_no desc
+	</select>
+	
+	<select id="selectCs">
+		select *
+		from cs_board
+			left join cs_reply using(cs_no)
+		where cs_no = #{csNo}
+	</select>
+	
+	<select id="selectProduct">
+		select *
+		from product
+		where product_no = #{pId}
+	</select>
+	
+	<update id="updateProduct">
+		update product
+		set product_name = #{productName}, product_price = #{productPrice}, product_category = #{productCategory},
+		product_description = #{productDescription}, product_company = #{productCompany}, product_stock = #{productStock}
+		where product_no = #{productNo}
+	</update>
+	
+	<insert id="enrollReply">
+		<selectKey order="BEFORE" keyProperty="csReplyNo" resultType="int">
+			select cs_reply_seq.nextval from dual
+		</selectKey>
+	
+		insert into cs_reply
+		values(cs_reply_seq.nextval, sysdate, #{csReplyContent}, #{csNo}, #{memberNo})
+	</insert>
+	
+	<update id="updateCsStatus">
+		update cs_board
+		set cs_state = #{csState}
+		where cs_no = #{csNo}
+	</update>
+	
+	<update id="updatePaymentDetail">
+		update orders
+		set delivery_state = #{deliveryState}
+		where order_no = #{orderNo}
+	</update>
+	
+	<insert id="insertAttm">
+		insert all
+		<foreach collection="list" item="item" separator=" ">
+			into attachment
+			values(new_aid, #{item.refProductNo}, #{item.originalName}, #{item.renameName}, #{item.attmPath}, #{item.attmLevel}, default)
+		</foreach>
+		select * from dual
+	</insert>
+	
+	<select id="selectAttmList" resultType="Attachment">
+		select *
+		from attachment
+		where attm_status='Y'
+		<if test="pId != null">
+			and ref_product_no = #{product_no}
+		</if>
+		order by attm_id
+	</select>
+	
+	<delete id="deleteAttm">
+		delete from attachment
+		where ref_product_no = #{pId}
+	</delete>
+	
+	
+		<!--     루강 전체회원수 -->
+    <select id="getMemberCount" resultType="int">
+        SELECT COUNT(*) FROM MEMBER
+    </select>
+    
+    	<!-- 루강  전체 회원리스트 -->
+    <select id="selectMemberList" resultType="AdminMember">
+        SELECT * FROM MEMBER ORDER BY MEMBER_NO DESC
+    </select>
+    
+      
+	<!--     루강 회원등급변경 -->
+    <update id="updateMemberGrade">
+        UPDATE member 
+        SET grade = #{grade} 
+        WHERE member_no = #{memberNo}
+    </update>
+    
+     <!-- 루강 등급관리 (페이징 없이) -->
+    <select id="selectmanageGrade" resultType="AdminMember">
+        SELECT 
+            member_no AS memberNo,
+            member_id AS memberId,
+            mem_name AS memName,
+            gender,
+            age,
+            email,
+            phone,
+            grade,
+            is_delete,
+            password,
+            is_admin
+        FROM member
+        WHERE is_delete = 'N'
+        ORDER BY member_no DESC
+    </select>
+    
+    
+    
+    
+    
+	<!--     루강 회원별 게시글 개수 -->
+    <select id="getMemberPostCount" resultType="int">
+        SELECT COUNT(*) FROM BOARD
+    </select>
+    
+    	<!--     루강 게시글 관리리스트(페이징X) -->
+    <select id="selectMemberPostManagement" resultType="AdminBoard">
+        SELECT b.*, m.mem_name AS memName
+        FROM BOARD b
+        JOIN MEMBER m ON b.member_no = m.member_no
+        ORDER BY b.board_no DESC
+    </select>
+    
+	
+
+    
+   
+  
+	<!--     루강 관리자 권한변경 -->
+    <update id="updateAdminStatus">
+        UPDATE member
+        SET is_admin = #{isAdmin}
+        WHERE member_no = #{memberNo}
+    </update>
+    
+	<!--     루강 회원삭제 -->
+    <update id="deleteMember">
+        UPDATE member SET is_delete = 'Y' WHERE member_no = #{memberNo}
+    </update>
+    
+    	<!--     루강 회원이름 아이디로 검색 -->
+    <select id="searchMember" resultType="com.zoozooclub.admin.model.vo.AdminMember">
+        SELECT * FROM MEMBER
+        WHERE (mem_name LIKE '%' || #{keyword} || '%' OR member_id LIKE '%' || #{keyword} || '%')
+        ORDER BY MEMBER_NO DESC
+    </select>
+    
+    	<!-- 	루강 회원등급으로 검색 -->
+    <select id="searchMemberGrade" parameterType="string" resultType="AdminMember">
+        SELECT
+            member_no AS memberNo,
+            member_id AS memberId,
+            mem_name AS memName,
+            gender,
+            age,
+            email,
+            phone,
+            grade,
+            is_delete,
+            password,
+            is_admin
+        FROM member
+        WHERE
+            is_delete = 'N'
+            AND (
+                mem_name LIKE '%' || #{keyword} || '%'
+                OR member_id LIKE '%' || #{keyword} || '%'
+                OR email LIKE '%' || #{keyword} || '%'
+            )
+        ORDER BY member_no DESC
+    </select>
+      
+    <!--    루강 등급관리용 전체회원 수 -->
+    <select id="getManageGradeCount" resultType="int">
+	    SELECT COUNT(*) FROM MEMBER
+	    <!-- 필요시 WHERE is_delete = 'N' -->
+	</select>
+    
+    <!--     루강 회원별 게시글 관리리스트(페이징O) -->
+    <select id="selectmemberPostManagement" resultType="AdminBoard">
+        SELECT b.*, m.mem_name AS memName
+        FROM BOARD b
+        JOIN MEMBER m ON b.member_no = m.member_no
+        ORDER BY b.board_no DESC
+    </select>
+    
+    <!--     루강 공지글 게시글등록 -->
+    <insert id="insertNoticeBoard" parameterType="com.zoozooclub.board.model.vo.Board">
+        <selectKey keyProperty="boardNo" resultType="int" order="BEFORE">
+            SELECT COMMUNITY_BOARD_SEQ.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO board (
+            board_no, board_title, board_content, board_category, board_public, board_isnotice, board_date, member_no
+        ) VALUES (
+            #{boardNo}, #{boardTitle}, #{boardContent}, #{boardCategory}, #{boardPublic}, #{boardIsnotice}, SYSDATE, #{memberNo}
+        )
+    
+    </insert>
+    
+    
+    
+    
+	   
+	
+    
+	<!-- 	루강 회원게시글 검색 -->
+    <select id="searchMemberPosts" parameterType="string" resultType="AdminBoard">
+        SELECT
+            b.board_no AS boardNo,
+            b.board_title AS boardTitle,
+            m.mem_name AS memName,
+            b.board_isnotice AS boardIsnotice,
+            TO_CHAR(b.board_date, 'YYYY-MM-DD') AS boardDate
+        FROM board b
+        JOIN member m ON b.member_no = m.member_no
+        WHERE
+            b.board_title LIKE '%' || #{keyword} || '%'
+            OR m.mem_name LIKE '%' || #{keyword} || '%'
+            OR TO_CHAR(b.board_no) LIKE '%' || #{keyword} || '%'
+        ORDER BY b.board_no DESC
+    </select>
+    
+    
+	<!--     루강 공지글 리스트 -->
+    <select id="selectNoticeList" resultType="com.zoozooclub.board.model.vo.Board">
+	    SELECT
+	        board_no        AS boardNo,
+	        board_title     AS boardTitle,
+	        board_content   AS boardContent,
+	        board_category  AS boardCategory,
+	        board_date      AS boardDate,
+	        board_read_count AS boardReadCount,
+	        board_public    AS boardPublic,
+	        member_no       AS memberNo,
+	        board_isnotice  AS boardIsnotice,
+	        board_image     AS boardImage,
+	        is_delete       AS isDelete
+	    FROM board
+	    WHERE board_category = 2 AND board_isnotice = 'Y'
+	    ORDER BY board_no DESC
+	</select>
+
+    
+    <!--     루강 전체신고글 개수 -->
+    <select id="getReportCount" resultType="int">
+        SELECT COUNT(*) FROM board_report
+    </select>
+    
+	<!--     루강 신고글 리스트 페이징O-->
+     <select id="selectBoardReportList" resultType="BoardReport">
+        SELECT 
+            r.report_no AS reportNo,
+            r.board_no AS boardNo,
+            b.board_title AS boardTitle,
+            m.mem_name AS reporterName,
+            r.report_reason AS reportReason,
+            r.report_date AS reportDate,
+            r.is_delete AS isDelete
+        FROM board_report r
+        JOIN board b ON r.board_no = b.board_no
+        JOIN member m ON r.member_no = m.member_no
+        WHERE r.is_delete = 'N'
+        ORDER BY r.report_no DESC
+    </select>
+    
+    <!--     루강 신고글 삭제 -->
+    <update id="deleteReport">
+        UPDATE board_report SET is_delete = 'Y' WHERE report_no = #{reportNo}
+    </update>
+</mapper>
+

@@ -1,0 +1,46 @@
+/* sidebar.css */
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    background-color: #00274e;
+    padding: 20px;
+    box-sizing: border-box;
+    border-right: 1px solid #ccc;
+    color: #ffffff; /* 기본 글자색: 흰색 */
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.sidebarMenu h4 {
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.sidebarMenu ul {
+    display: none;
+    list-style: none;
+    padding-left: 15px;
+}
+
+.sidebarMenu li {
+    margin: 5px 0;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.sidebarMenu li:hover {
+    text-decoration: underline;
+}
+
+/* 열려있는 ul 강조*/
+.sidebarMenu h4.active {
+    font-weight: bold;
+    color: #6c63ff;
+}
+
+.sidebar.hidden {
+    display: none;
+}
